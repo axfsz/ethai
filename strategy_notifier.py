@@ -65,19 +65,27 @@ def load_order_data_from_excel(file_path: str) -> list:
     return orders
 
 def generate_order_strategy_message(order: dict) -> str:
-    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    from datetime import datetime, timedelta
+    # 转换为北京时间 (UTC+8)
+    now = (datetime.utcnow() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M (北京时间)")
+    
     message = (
-        f"🚀 *{order['symbol']} 动态挂单策略更新*\n"
-        f"*进仓信号:* {order['signal']}\n"
-        f"*挂单策略:*\n"
-        f"- 买入挂单: {order['buy_price']} USDT, 数量: {order['qty']} {order['symbol']}\n"
-        f"- 止盈价格: {order['take_profit']} USDT\n"
-        f"- 止损价格: {order['stop_loss']} USDT\n"
+        f"🚀 *{order['symbol']} 动态挂单策略更新*\n\n"
+        f"📊 *进仓信号:* \n"
+        f"- 突破关键阻力位 {order.get('break_price', order['buy_price']*0.98):.2f} USDT\n"
+        f"- 15分钟K线收盘价确认\n\n"
+        f"🛒 *挂单策略:*\n"
+        f"- 买入挂单: {order['buy_price']:.2f} USDT, 数量: {order['qty']:.4f} {order['symbol']}\n"
+        f"- 止盈价格: {order['take_profit']:.2f} USDT ({((order['take_profit']/order['buy_price'])-1)*100:.1f}%)\n"
+        f"- 止损价格: {order['stop_loss']:.2f} USDT ({((order['buy_price']-order['stop_loss'])/order['buy_price'])*100:.1f}%)\n\n"
     )
     if order['extra_condition']:
-        message += f"- 额外条件: {order['extra_condition']}\n"
+        message += f"📌 *额外条件:* {order['extra_condition']}\n\n"
     message += (
-        f"📈 *策略说明:* 短期突破跟随，3%止盈，2%止损，自动撤单60分钟未成交\n"
+        f"📈 *策略说明:* \n"
+        f"短期突破跟随策略，价格突破后入场\n"
+        f"{((order['take_profit']/order['buy_price'])-1)*100:.1f}%止盈目标，{((order['buy_price']-order['stop_loss'])/order['buy_price'])*100:.1f}%止损保护\n"
+        f"自动撤单60分钟未成交\n\n"
         f"⏰ *生成时间:* {now}"
     )
     return message
