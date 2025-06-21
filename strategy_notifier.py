@@ -18,8 +18,9 @@ TELEGRAM_CHAT_IDS = DEFAULT_TELEGRAM_CHAT_IDS.copy()
 # ================== 日志配置 ==================
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    filename='strategy_notifier.log'
+    format='%(asctime)s %(levelname)s %(message)s',
+    filename='log.file',
+    filemode='a'
 )
 
 # ================== 通用函数 ==================
@@ -49,45 +50,44 @@ def load_order_data_from_excel(file_path: str) -> list:
     except Exception as e:
         app.logger.error(f"读取Excel失败: {str(e)}")
         return []
-
     orders = []
     for _, row in df.iterrows():
         order = {
-            'signal': str(row.get('进仓信号', '')).strip(),
-            'buy_price': float(row.get('买入价格', 0)),
-            'qty': float(row.get('数量', 0)),
-            'take_profit': float(row.get('止盈价格', 0)),
-            'stop_loss': float(row.get('止损价格', 0)),
-            'extra_condition': str(row.get('额外条件', '')).strip(),
-            'symbol': str(row.get('币种', 'ETH')).strip()
+            'strategy': str(row.get('策略名称', '')).strip(),
+            'direction': str(row.get('方向', '')).strip(),
+            'trigger_price': row.get('触发价格', ''),
+            'order_price': row.get('挂单价格', ''),
+            'stop_loss': row.get('止损价格', ''),
+            'take_profit': row.get('止盈价格', ''),
+            'qty': row.get('数量', ''),
+            'investment': row.get('投资资金', ''),
+            'leverage': row.get('杠杆倍数', ''),
+            'profit': row.get('预计盈利', ''),
+            'loss': row.get('预计亏损', ''),
+            'eta': row.get('预计到达时间', ''),
+            'remark': str(row.get('备注', '')).strip(),
+            'symbol': 'ETH'
         }
         orders.append(order)
     return orders
 
-def generate_order_strategy_message(order: dict) -> str:
+def generate_order_strategy_message(orders: list) -> str:
     from datetime import datetime, timedelta
-    # 转换为北京时间 (UTC+8)
     now = (datetime.utcnow() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M (北京时间)")
-    
-    message = (
-        f"🚀 *{order['symbol']} 动态挂单策略更新*\n\n"
-        f"📊 *进仓信号:* \n"
-        f"- 突破关键阻力位 {order.get('break_price', order['buy_price']*0.98):.2f} USDT\n"
-        f"- 15分钟K线收盘价确认\n\n"
-        f"🛒 *挂单策略:*\n"
-        f"- 买入挂单: {order['buy_price']:.2f} USDT, 数量: {order['qty']:.4f} {order['symbol']}\n"
-        f"- 止盈价格: {order['take_profit']:.2f} USDT ({((order['take_profit']/order['buy_price'])-1)*100:.1f}%)\n"
-        f"- 止损价格: {order['stop_loss']:.2f} USDT ({((order['buy_price']-order['stop_loss'])/order['buy_price'])*100:.1f}%)\n\n"
-    )
-    if order['extra_condition']:
-        message += f"📌 *额外条件:* {order['extra_condition']}\n\n"
-    message += (
-        f"📈 *策略说明:* \n"
-        f"短期突破跟随策略，价格突破后入场\n"
-        f"{((order['take_profit']/order['buy_price'])-1)*100:.1f}%止盈目标，{((order['buy_price']-order['stop_loss'])/order['buy_price'])*100:.1f}%止损保护\n"
-        f"自动撤单60分钟未成交\n\n"
-        f"⏰ *生成时间:* {now}"
-    )
+    message = ""
+    for order in orders:
+        message += (
+            f"🚀 *{order['strategy']}*\n\n"
+            f"📊 *方向:* {order['direction']}\n"
+            f"- 触发价格: {order['trigger_price']}\n"
+            f"- 挂单价格: {order['order_price']}\n"
+            f"- 止盈价格: {order['take_profit']}\n"
+            f"- 止损价格: {order['stop_loss']}\n"
+            f"- 预计到达时间: {order['eta']}\n\n"
+        )
+        if order['remark']:
+            message += f"📌 策略分析: {order['remark']}\n\n"
+    message += f"⏰ 生成时间: {now}"
     return message
 
 def notify_order_strategy(file_path: str):

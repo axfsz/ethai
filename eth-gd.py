@@ -5,6 +5,8 @@ from datetime import datetime
 import numpy as np
 import openpyxl
 from openpyxl.styles import Font, Alignment
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s', filename='log.file', filemode='a')
 
 # 获取币安 ETHUSDT 最新价格和K线数据
 def get_binance_data():
@@ -31,7 +33,7 @@ def get_binance_data():
         }
 
     except Exception as e:
-        print(f"获取数据失败: {e}")
+        logging.error(f"获取数据失败: {e}")
         return None
 
 # 缠论分型分析
@@ -165,10 +167,10 @@ def scheduled_task():
     investment_amount = 5000  # 在此设置您的投资资金（即头寸总价值）
     leverage = 10  # 在此设置您的杠杆倍数
 
-    print("正在获取实时市场数据...")
+    logging.info("正在获取实时市场数据...")
     data = get_binance_data()
     if data:
-        print(f"当前价格: {data['current_price']}, MA5: {data['ma5']:.2f}, MA20: {data['ma20']:.2f}")
+        logging.info(f"当前价格: {data['current_price']}, MA5: {data['ma5']:.2f}, MA20: {data['ma20']:.2f}")
 
         # 生成新的挂单表 DataFrame
         df = generate_order_table(data, investment_amount, leverage)
@@ -180,7 +182,7 @@ def scheduled_task():
             while len(book.sheetnames) >= 2:
                 oldest_sheet_name = book.sheetnames[0]
                 book.remove(book[oldest_sheet_name])
-                print(f"🗑️ 已删除最旧的工作表: {oldest_sheet_name}")
+                logging.info(f"🗑️ 已删除最旧的工作表: {oldest_sheet_name}")
             book.save(output_file)
         except FileNotFoundError:
             # 如果文件不存在，后续的ExcelWriter会自动创建
@@ -228,17 +230,17 @@ def scheduled_task():
                 else:
                     worksheet.column_dimensions[col_letter].width = 15
 
-            print(f"✅ 已生成并格式化新的挂单表: {sheet_name}")
+            logging.info(f"✅ 已生成并格式化新的挂单表: {sheet_name}")
             
             # 触发通知脚本
             try:
                 requests.post("http://localhost:5001/notify_order_strategy", params={"file": output_file})
-                print("✅ 已触发策略通知")
+                logging.info("✅ 已触发策略通知")
             except Exception as e:
-                print(f"❌ 触发策略通知失败: {e}")
+                logging.error(f"❌ 触发策略通知失败: {e}")
 
     else:
-        print("❌ 获取市场数据失败，未生成挂单表")
+        logging.error("❌ 获取市场数据失败，未生成挂单表")
 
 # 定时任务线程
 def run_scheduler():
@@ -259,11 +261,11 @@ if __name__ == "__main__":
     scheduler_thread.daemon = True
     scheduler_thread.start()
     
-    print("✅ 定时策略服务已启动，每两小时自动分析市场行情并生成策略")
-    print("按 Ctrl+C 退出...")
+    logging.info("✅ 定时策略服务已启动，每两小时自动分析市场行情并生成策略")
+    logging.info("按 Ctrl+C 退出...")
     
     try:
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
-        print("\n服务已停止")
+        logging.info("\n服务已停止")
