@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  eth-trading:
+    build: .
+    container_name: eth-trading
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./ETH_动态挂单表.xlsx:/app/ETH_动态挂单表.xlsx
+      - ./log.file:/app/log.file
