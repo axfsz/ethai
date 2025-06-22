@@ -42,9 +42,12 @@ def send_telegram(message: str) -> bool:
 
 def load_order_data_from_excel(file_path: str) -> list:
     try:
-        df = pd.read_excel(file_path)
+        # 读取最新的工作表
+        xls = pd.ExcelFile(file_path)
+        sheet_name = xls.sheet_names[-1]
+        df = pd.read_excel(file_path, sheet_name=sheet_name)
     except Exception as e:
-        app.logger.error(f"读取Excel失败: {str(e)}")
+        app.logger.error(f"读取Excel最新工作表失败: {str(e)}")
         return []
     orders = []
     for _, row in df.iterrows():
@@ -60,7 +63,7 @@ def load_order_data_from_excel(file_path: str) -> list:
             'leverage': row.get('杠杆倍数', ''),
             'profit': row.get('预计盈利', ''),
             'loss': row.get('预计亏损', ''),
-            'remark': str(row.get('备注', '')).strip(),
+            '策略分析': str(row.get('策略分析', '')).strip(), # 修正键名
             'symbol': 'ETH'
         }
         orders.append(order)
@@ -72,42 +75,27 @@ def generate_order_strategy_message(orders: list) -> str:
     from datetime import datetime, timedelta
     now = (datetime.utcnow() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M (北京时间)")
 
-    if not orders:
-        return f"<b>📉 ETH 策略分析</b>\n\n<i>当前无明确交易信号，市场方向不明，建议保持观望。</i>\n\n⏰ <i>{now}</i>"
-
     message = f"<b>📈 ETH 趋势黄金三角策略分析</b>\n<pre>--------------------------</pre>\n"
 
     for order in orders:
         direction_icon = "🟢 追多 (BUY)" if order.get('direction', '').upper() == 'BUY' else "🔴 追空 (SELL)"
 
-        remark = order.get('remark', '')
-        analysis = {
-            '主趋势分析': 'N/A',
-            '波段结构分析': 'N/A',
-            '入场信号分析': 'N/A',
-            '风险评估': 'N/A'
-        }
-        if remark:
-            try:
-                parts = [p.strip() for p in remark.split('|') if p.strip()]
-                for part in parts:
-                    if ':' in part:
-                        key, value = part.split(':', 1)
-                        analysis[key.strip()] = value.strip()
-            except Exception as e:
-                app.logger.error(f"解析备注失败 '{remark}': {e}")
+        # 将策略分析内容包裹在<pre>标签中以保持格式
+        analysis_content = order.get('策略分析', '无')
+        analysis_html = f"<pre>{analysis_content}</pre>"
+
+        trigger_signal = order.get('trigger_signal', 'N/A')
+        if isinstance(trigger_signal, (int, float)):
+            trigger_signal = f"{trigger_signal:.2f}"
 
         message += (
             f"<b>🔹 策略方向: {direction_icon}</b>\n"
-            f"   - <b>触发信号:</b> <code>{order.get('trigger_signal', 'N/A')}</code>\n"
+            f"   - <b>触发信号:</b> <code>{trigger_signal}</code>\n"
             f"   - <b>挂单价格:</b> <code>{order.get('order_price', 'N/A')}</code>\n"
             f"   - <b>止损防守:</b> <code>{order.get('stop_loss', 'N/A')}</code>\n"
             f"   - <b>止盈目标:</b> <code>{order.get('take_profit', 'N/A')}</code>\n\n"
             f"<b>- - - - - 策略逻辑拆解 - - - - -</b>\n"
-            f"   ▫️ <b>主趋势判断:</b> <i>{analysis.get('主趋势分析')}</i>\n"
-            f"   ▫️ <b>波段结构识别:</b> <i>{analysis.get('波段结构分析')}</i>\n"
-            f"   ▫️ <b>入场信号确认:</b> <i>{analysis.get('入场信号分析')}</i>\n"
-            f"   ▫️ <b>综合风险评估:</b> <i>{analysis.get('风险评估')}</i>\n\n"
+            f"{analysis_html}\n"
         )
 
     message += f"<pre>====================</pre>\n"
@@ -169,6 +157,36 @@ def api_notify_order_strategy():
     file_path = request.args.get("file", "ETH_动态挂单表.xlsx")
     notify_order_strategy(file_path)
     return "策略通知已触发", 200
+
+@app.route("/notify_status", methods=["POST"])
+def api_notify_status():
+    from datetime import datetime, timedelta
+    now = (datetime.utcnow() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M (北京时间)")
+    message = f"<b>📉 ETH 策略分析</b>\n\n<i>当前无明确交易信号，市场方向不明，建议保持观望。</i>\n\n⏰ <i>{now}</i>"
+    send_telegram(message)
+    return "状态通知已发送", 200
+
+@app.route("/test_notify", methods=["POST"])
+def test_notify():
+    # 用于测试的模拟订单数据
+    test_orders = [
+        {
+            'direction': 'BUY',
+            'trigger_signal': 2300.50,
+            'order_price': 2305.00,
+            'stop_loss': 2280.00,
+            'take_profit': 2380.00,
+            '策略分析': '主趋势分析: 4H EMA20判断为多头趋势。\n波段结构分析: 1H形成上升推进结构。\n入场信号分析: 15M成交量显著放大。\n核心策略: 趋势黄金三角。\n风险评估: 盈亏比大于3:1，风险可控。'
+        }
+    ]
+    # 测试有策略的通知
+    strategy_msg = generate_order_strategy_message(test_orders)
+    send_telegram(strategy_msg)
+    
+    # 测试无策略的通知
+    api_notify_status()
+    
+    return "测试通知已发送", 200
 
 # ================== 启动 ==================
 if __name__ == "__main__":

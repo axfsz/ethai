@@ -16,14 +16,14 @@ def get_binance_data():
         price_resp = requests.get(ticker_url).json()
         current_price = float(price_resp['price'])
 
-        # 根据k.md，获取多个时间框架的K线数据
-        # 日线数据，用于判断主趋势
-        kline_url_1d = "https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=1d&limit=30"
-        klines_1d = requests.get(kline_url_1d).json()
-
-        # 4小时数据，用于识别波段结构
-        kline_url_4h = "https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=4h&limit=200"
+        # 根据新要求，获取4h, 1h, 15m三个时间框架的K线数据
+        # 4小时数据，用于判断主趋势
+        kline_url_4h = "https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=4h&limit=50"
         klines_4h = requests.get(kline_url_4h).json()
+
+        # 1小时数据，用于识别波段推进结构
+        kline_url_1h = "https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=1h&limit=100"
+        klines_1h = requests.get(kline_url_1h).json()
 
         # 15分钟数据，用于精确入场
         kline_url_15m = "https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=15m&limit=50"
@@ -31,8 +31,8 @@ def get_binance_data():
 
         return {
             "current_price": current_price,
-            "klines_1d": klines_1d,
             "klines_4h": klines_4h,
+            "klines_1h": klines_1h,
             "klines_15m": klines_15m
         }
 
@@ -68,7 +68,7 @@ def detect_swings(klines, order=5):
     
     return swing_highs, swing_lows
 
-def create_order(name, direction, trigger, order_price, sl, tp, investment, leverage, remark):
+def create_order(name, direction, trigger, order_price, sl, tp, investment, leverage, analysis):
     quantity_formula = f'={investment}/{order_price}'
     if direction == "BUY":
         profit_formula = f'=({tp}-{order_price})*G2*I2' # Assuming G2 is quantity, I2 is leverage
@@ -88,199 +88,180 @@ def create_order(name, direction, trigger, order_price, sl, tp, investment, leve
         "杠杆倍数": leverage,
         "预计盈利": profit_formula,
         "预计亏损": loss_formula,
-        "备注": remark
+        "策略分析": analysis
     }
 
-# 动态生成挂单表 (重构版)
+# 动态生成挂单表 (V3 - 核心逻辑重构)
 def generate_order_table(market_data, investment_amount, leverage):
     current_price = market_data['current_price']
-    klines_1d = market_data['klines_1d']
     klines_4h = market_data['klines_4h']
+    klines_1h = market_data['klines_1h']
     klines_15m = market_data['klines_15m']
-
-    # --- 1. 多周期分析 --- 
-    # 日线级别: 判断主趋势 (EMA20)
-    closes_1d = [float(k[4]) for k in klines_1d]
-    ema20_1d = calc_ema(closes_1d, 20)[-1]
-    main_trend = "多头" if current_price > ema20_1d else "空头"
-
-    # 4小时级别: 识别波浪结构和关键位
-    highs_4h = [float(k[2]) for k in klines_4h]
-    lows_4h = [float(k[3]) for k in klines_4h]
-    swing_highs, swing_lows = detect_swings(klines_4h)
-    last_high = swing_highs[-1][1] if swing_highs else max(highs_4h)
-    last_low = swing_lows[-1][1] if swing_lows else min(lows_4h)
-    swing_range = abs(last_high - last_low)
-
-    # 15分钟级别: 精确入场信号 (成交量)
-    volumes_15m = [float(k[5]) for k in klines_15m]
-    avg_volume_15m = np.mean(volumes_15m[-20:])
-    is_volume_breakout = volumes_15m[-1] > avg_volume_15m * 1.5
-
-    # --- 2. 策略决策: 趋势黄金三角 (波浪+EMA+放量) ---
-    # 精确波段分析
-    wave_analysis = "结构不明"
-    if main_trend == "多头":
-        if swing_lows and current_price > swing_lows[-1][1]:
-            if len(swing_lows) > 1 and swing_lows[-1][1] > swing_lows[-2][1]:
-                wave_analysis = f"上升趋势延续，形成更高低点({swing_lows[-1][1]:.2f})，确认支撑。"
-            else:
-                wave_analysis = f"价格在关键支撑({last_low:.2f})上方运行，可能启动新一轮上涨。"
-        else:
-            wave_analysis = f"处于回调阶段，关注下方支撑({last_low:.2f})的有效性。"
-    elif main_trend == "空头":
-        if swing_highs and current_price < swing_highs[-1][1]:
-            if len(swing_highs) > 1 and swing_highs[-1][1] < swing_highs[-2][1]:
-                wave_analysis = f"下降趋势延续，形成更低高点({swing_highs[-1][1]:.2f})，确认阻力。"
-            else:
-                wave_analysis = f"价格在关键阻力({last_high:.2f})下方运行，可能启动新一轮下跌。"
-        else:
-            wave_analysis = f"处于反弹阶段，关注上方阻力({last_high:.2f})的有效性。"
-
-    # --- 3. 生成交易订单 --- 
     orders = []
-    # 买入策略: 主趋势多头 + 4H回调结束 + 15M放量突破
-    if main_trend == "多头" and is_volume_breakout:
-        # 修正逻辑: 追多时，触发价 < 挂单价，止损价 < 挂单价
-        buy_trigger_price = round(current_price * 0.998, 2)  # 触发价设置在现价下方
-        buy_order_price = round(current_price * 0.999, 2)    # 挂单价略高于触发价，形成限价买单
-        stop_loss_price = round(last_low * 0.995, 2)      # 止损设置在波段低点下方
+
+    # --- 1. 核心信号分析 --- 
+    # 信号1: 4H级别主趋势 (EMA20)
+    closes_4h = [float(k[4]) for k in klines_4h]
+    ema20_4h = calc_ema(closes_4h, 20)[-1]
+    main_trend = "多头" if current_price > ema20_4h else "空头"
+    trend_analysis = f"4H EMA20判断为{main_trend}趋势 (现价:{current_price:.2f} vs EMA:{ema20_4h:.2f})。"
+
+    # 信号2: 1H级别波浪推进结构
+    swing_highs_1h, swing_lows_1h = detect_swings(klines_1h, order=5)
+    is_up_propulsion = False
+    is_down_propulsion = False
+    wave_analysis = "结构不明"
+
+    if len(swing_lows_1h) >= 2 and len(swing_highs_1h) >= 2:
+        # 上升推进: 更高的高点和更高的低点
+        if swing_highs_1h[-1][1] > swing_highs_1h[-2][1] and swing_lows_1h[-1][1] > swing_lows_1h[-2][1]:
+            is_up_propulsion = True
+            wave_analysis = f"1H形成上升推进结构 (高点:{swing_highs_1h[-1][1]:.2f} > {swing_highs_1h[-2][1]:.2f}, 低点:{swing_lows_1h[-1][1]:.2f} > {swing_lows_1h[-2][1]:.2f})。"
+        # 下降推进: 更低的高点和更低的低点
+        elif swing_highs_1h[-1][1] < swing_highs_1h[-2][1] and swing_lows_1h[-1][1] < swing_lows_1h[-2][1]:
+            is_down_propulsion = True
+            wave_analysis = f"1H形成下降推进结构 (高点:{swing_highs_1h[-1][1]:.2f} < {swing_highs_1h[-2][1]:.2f}, 低点:{swing_lows_1h[-1][1]:.2f} < {swing_lows_1h[-2][1]:.2f})。"
+    else:
+        wave_analysis = "1H波浪结构不明确，无法确认推进。"
+
+    # 信号3: 15M级别突破放量
+    volumes_15m = [float(k[5]) for k in klines_15m]
+    avg_volume_15m = np.mean(volumes_15m[-20:-1]) # 计算最近20根K线的平均成交量（不含当前）
+    is_volume_breakout = volumes_15m[-1] > avg_volume_15m * 2 # 当前成交量是平均的2倍以上
+    volume_analysis = f"15M成交量{'显著放大' if is_volume_breakout else '平稳'} (当前:{volumes_15m[-1]:.0f} vs 平均:{avg_volume_15m:.0f})。"
+
+    # --- 2. 策略决策与订单生成 ---
+    # 追多策略: 4H多头 + 1H上升推进 + 15M放量
+    if main_trend == "多头" and is_up_propulsion and is_volume_breakout:
+        last_low = swing_lows_1h[-1][1]
+        buy_order_price = round(current_price * 1.001, 2)
+        buy_trigger_price = round(current_price, 2)
+        stop_loss_price = round(last_low * 0.99, 2)
         risk_amount = buy_order_price - stop_loss_price
         take_profit_price = round(buy_order_price + risk_amount * 3, 2)
 
-        buy_remark = (
-            f"主趋势分析: {main_trend}, 日线EMA20之上，市场看多。|"
-            f"波段结构分析: {wave_analysis}|"
-            f"入场信号分析: 15分钟线放量({volumes_15m[-1]:.0f})，确认入场动能。|"
-            f"核心策略: 趋势黄金三角 (多周期共振).|"
-            f"风险评估: 盈亏比大于3:1，止损位于关键结构位下方，风险可控。"
+        final_analysis = (
+            f"主趋势分析: {trend_analysis}\n"
+            f"波段结构分析: {wave_analysis}\n"
+            f"入场信号分析: {volume_analysis}\n"
+            f"核心策略: 趋势黄金三角 (4H趋势+1H推进+15M放量)。\n"
+            f"风险评估: 盈亏比大于3:1，止损设置于1H关键结构位下方，风险可控。"
         )
-        orders.append(create_order("ETH趋势追多", "BUY", buy_trigger_price, buy_order_price, stop_loss_price, take_profit_price, investment_amount, leverage, buy_remark))
+        orders.append(create_order("ETH趋势追多", "BUY", buy_trigger_price, buy_order_price, stop_loss_price, take_profit_price, investment_amount, leverage, final_analysis))
 
-    # 卖出策略: 主趋势空头 + 4H反弹结束 + 15M放量突破
-    if main_trend == "空头" and is_volume_breakout:
-        # 修正逻辑: 追空时，触发价 > 挂单价，止损价 > 挂单价
-        sell_trigger_price = round(current_price * 1.002, 2)  # 触发价设置在现价上方
-        sell_order_price = round(current_price * 1.001, 2)    # 挂单价略低于触发价，形成限价卖单
-        stop_loss_price = round(last_high * 1.005, 2)      # 止损设置在波段高点上方
+    # 追空策略: 4H空头 + 1H下降推进 + 15M放量
+    if main_trend == "空头" and is_down_propulsion and is_volume_breakout:
+        last_high = swing_highs_1h[-1][1]
+        sell_order_price = round(current_price * 0.999, 2)
+        sell_trigger_price = round(current_price, 2)
+        stop_loss_price = round(last_high * 1.01, 2)
         risk_amount = stop_loss_price - sell_order_price
         take_profit_price = round(sell_order_price - risk_amount * 3, 2)
 
-        sell_remark = (
-            f"主趋势分析: {main_trend}, 日线EMA20之下，市场看空。|"
-            f"波段结构分析: {wave_analysis}|"
-            f"入场信号分析: 15分钟线放量({volumes_15m[-1]:.0f})，确认入场动能。|"
-            f"核心策略: 趋势黄金三角 (多周期共振).|"
-            f"风险评估: 盈亏比大于3:1，止损位于关键结构位上方，风险可控。"
+        final_analysis = (
+            f"主趋势分析: {trend_analysis}\n"
+            f"波段结构分析: {wave_analysis}\n"
+            f"入场信号分析: {volume_analysis}\n"
+            f"核心策略: 趋势黄金三角 (4H趋势+1H推进+15M放量)。\n"
+            f"风险评估: 盈亏比大于3:1，止损设置于1H关键结构位上方，风险可控。"
         )
-        orders.append(create_order("ETH趋势追空", "SELL", sell_trigger_price, sell_order_price, stop_loss_price, take_profit_price, investment_amount, leverage, sell_remark))
+        orders.append(create_order("ETH趋势追空", "SELL", sell_trigger_price, sell_order_price, stop_loss_price, take_profit_price, investment_amount, leverage, final_analysis))
 
     return pd.DataFrame(orders)
 
 
 
-import schedule
-import time
-from threading import Thread
+last_status_notify_time = 0
 
-# 定时任务函数
-def scheduled_task():
+# 主任务：获取数据、生成订单并写入Excel
+def run_main_task():
+    global last_status_notify_time
     output_file = "ETH_动态挂单表.xlsx"
-    investment_amount = 5000  # 在此设置您的投资资金（即头寸总价值）
-    leverage = 10  # 在此设置您的杠杆倍数
+    investment_amount = 5000  # 投资资金
+    leverage = 10  # 杠杆倍数
 
     logging.info("正在获取实时市场数据...")
     data = get_binance_data()
     if data:
         logging.info(f"当前价格: {data['current_price']}")
 
-        # 生成新的挂单表 DataFrame
         df = generate_order_table(data, investment_amount, leverage)
 
-        # 管理Excel工作表，只保留最近两个
+        if df.empty:
+            logging.info("当前无满足条件的交易信号，不生成新表。")
+            # 每小时通知一次无信号状态
+            current_time = time.time()
+            if current_time - last_status_notify_time > 3600:
+                try:
+                    requests.post("http://localhost:5001/notify_status")
+                    logging.info("已发送无交易机会的状态通知。")
+                    last_status_notify_time = current_time
+                except Exception as e:
+                    logging.error(f"发送状态通知失败: {e}")
+            return
+
         try:
             book = openpyxl.load_workbook(output_file)
-            # 当工作表数量达到或超过2个时，删除最旧的，以保持最多2个
             while len(book.sheetnames) >= 2:
                 oldest_sheet_name = book.sheetnames[0]
-                book.remove(book[oldest_sheet_name])
-                logging.info(f"🗑️ 已删除最旧的工作表: {oldest_sheet_name}")
+                if oldest_sheet_name != 'Init':
+                    book.remove(book[oldest_sheet_name])
+                    logging.info(f"🗑️ 已删除最旧的工作表: {oldest_sheet_name}")
+                else: # 如果最旧的是Init，则删除下一个
+                    if len(book.sheetnames) > 1:
+                        book.remove(book[book.sheetnames[1]])
+                        logging.info(f"🗑️ 已删除最旧的工作表: {book.sheetnames[1]}")
             book.save(output_file)
         except FileNotFoundError:
-            # 如果文件不存在，后续的ExcelWriter会自动创建
             pass
 
-        # 使用追加模式写入新的工作表
-        with pd.ExcelWriter(output_file, engine='openpyxl', mode='a', if_sheet_exists='new') as writer:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            sheet_name = f"挂单_{timestamp}"
+        sheet_name = datetime.now().strftime('%Y-%m-%d %H_%M')
+        with pd.ExcelWriter(output_file, engine='openpyxl', mode='a') as writer:
             df.to_excel(writer, sheet_name=sheet_name, index=False)
-
-            # --- 开始格式化 ---
-            workbook = writer.book
             worksheet = writer.sheets[sheet_name]
+            for col in worksheet.columns:
+                max_length = 0
+                column = col[0].column_letter
+                for cell in col:
+                    try:
+                        if len(str(cell.value)) > max_length:
+                            max_length = len(cell.value)
+                    except:
+                        pass
+                adjusted_width = (max_length + 2)
+                worksheet.column_dimensions[column].width = adjusted_width
+        logging.info(f"📈 新的挂单表已生成: {sheet_name}")
+        # 触发策略通知
+        try:
+            requests.post("http://localhost:5001/notify_order_strategy", params={"file": output_file})
+            logging.info("已触发策略通知")
+        except Exception as e:
+            logging.error(f"触发策略通知失败: {e}")
 
-            # 定义样式
-            font_remark = Font(name='仿宋', size=12, bold=True, color='008000') # 绿色
-            align_remark = Alignment(horizontal='left', vertical='center', wrap_text=True)
-
-            font_default = Font(name='宋体', size=11, bold=True)
-            align_default = Alignment(horizontal='center', vertical='center')
-
-            # 找到备注列的索引 (从1开始)
-            remark_col_idx = -1
-            for i, col_name in enumerate(df.columns):
-                if col_name == '备注':
-                    remark_col_idx = i + 1
-                    break
-
-            # 应用样式到表头和数据行
-            for row in worksheet.iter_rows():
-                for cell in row:
-                    if cell.column == remark_col_idx:
-                        cell.font = font_remark
-                        cell.alignment = align_remark
-                    else:
-                        cell.font = font_default
-                        cell.alignment = align_default
-            
-            # 调整列宽
-            for i, column_cells in enumerate(worksheet.columns):
-                col_letter = openpyxl.utils.get_column_letter(i + 1)
-                if i + 1 == remark_col_idx:
-                    worksheet.column_dimensions[col_letter].width = 80
-                else:
-                    worksheet.column_dimensions[col_letter].width = 15
-
-            logging.info(f"✅ 已生成并格式化新的挂单表: {sheet_name}")
-            
-            # 触发通知脚本
-            try:
-                requests.post("http://localhost:5001/notify_order_strategy", params={"file": output_file})
-                logging.info("✅ 已触发策略通知")
-            except Exception as e:
-                logging.error(f"❌ 触发策略通知失败: {e}")
-
-    else:
-        logging.error("❌ 获取市场数据失败，未生成挂单表")
-
-# 定时任务主循环
-def main():
-    logging.info("服务启动，立即执行一次初始任务...")
-    scheduled_task()  # 启动时立即执行一次
-
-    schedule.every(1).hour.do(scheduled_task)
-    logging.info("定时任务已设置为每小时执行一次。")
-    
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
-
-# 主逻辑
+# 主程序入口
 if __name__ == "__main__":
-    logging.info("✅ 定时策略服务已启动，每小时自动分析市场行情并生成策略")
-    logging.info("按 Ctrl+C 退出...")
+    output_file = "ETH_动态挂单表.xlsx"
     try:
-        main()
-    except KeyboardInterrupt:
-        logging.info("\n服务已停止")
+        book = openpyxl.load_workbook(output_file)
+        if not book.sheetnames or 'Init' not in book.sheetnames:
+            book.create_sheet("Init", 0)
+            book.save(output_file)
+    except FileNotFoundError:
+        book = openpyxl.Workbook()
+        book.create_sheet("Init", 0)
+        book.save(output_file)
+    
+    logging.info("✅ 实时监控已启动，每15分钟执行一次策略分析。")
+
+    while True:
+        try:
+            run_main_task()
+            logging.info("本次任务执行完毕，等待15分钟后再次运行...")
+            time.sleep(900)  # 等待15分钟
+        except KeyboardInterrupt:
+            logging.info("程序被用户中断。")
+            break
+        except Exception as e:
+            logging.error(f"程序发生未知错误: {e}")
+            logging.info("发生错误，等待5分钟后重试...")
+            time.sleep(300) # 发生错误时，等待5分钟再重试
