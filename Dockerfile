@@ -24,8 +24,6 @@ RUN apt-get update && apt-get install -y supervisor
 # 创建并授权日志目录
 RUN mkdir -p /var/log 
 
-# 授权应用目录
-RUN chown -R appuser:appuser /app
 
 # 配置supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
