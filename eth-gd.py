@@ -141,37 +141,37 @@ def generate_order_table(market_data, investment_amount, leverage):
     orders = []
     # 买入策略: 主趋势多头 + 4H回调结束 + 15M放量突破
     if main_trend == "多头" and is_volume_breakout:
-        # 修正逻辑: 追多时，触发价 > 挂单价，止损价 < 挂单价
-        buy_order_price = round(current_price * (1 - 0.001), 2) # 挂单价比现价稍低
-        buy_trigger_price = round(current_price * (1 + 0.001), 2) # 触发价比现价稍高
-        stop_loss_price = round(last_low * 0.995, 2) # 止损设置在波段低点下方
+        # 修正逻辑: 追多时，触发价 < 挂单价，止损价 < 挂单价
+        buy_trigger_price = round(current_price * 0.998, 2)  # 触发价设置在现价下方
+        buy_order_price = round(current_price * 0.999, 2)    # 挂单价略高于触发价，形成限价买单
+        stop_loss_price = round(last_low * 0.995, 2)      # 止损设置在波段低点下方
         risk_amount = buy_order_price - stop_loss_price
         take_profit_price = round(buy_order_price + risk_amount * 3, 2)
 
         buy_remark = (
-            f"主趋势分析: {main_trend}，日线EMA20之上，市场强势。|"
+            f"主趋势分析: {main_trend}, 日线EMA20之上，市场看多。|"
             f"波段结构分析: {wave_analysis}|"
-            f"入场信号分析: 15分钟线出现显著放量({volumes_15m[-1]:.0f} > {avg_volume_15m*1.5:.0f})，动能增强。|"
-            f"核心策略: 趋势黄金三角 (多周期共振)。|"
-            f"风险评估: 盈亏比大于3:1，止损设置于关键结构位下方，风险可控。"
+            f"入场信号分析: 15分钟线放量({volumes_15m[-1]:.0f})，确认入场动能。|"
+            f"核心策略: 趋势黄金三角 (多周期共振).|"
+            f"风险评估: 盈亏比大于3:1，止损位于关键结构位下方，风险可控。"
         )
         orders.append(create_order("ETH趋势追多", "BUY", buy_trigger_price, buy_order_price, stop_loss_price, take_profit_price, investment_amount, leverage, buy_remark))
 
     # 卖出策略: 主趋势空头 + 4H反弹结束 + 15M放量突破
     if main_trend == "空头" and is_volume_breakout:
-        # 修正逻辑: 追空时，触发价 < 挂单价，止损价 > 挂单价
-        sell_order_price = round(current_price * (1 + 0.001), 2) # 挂单价比现价稍高
-        sell_trigger_price = round(current_price * (1 - 0.001), 2) # 触发价比现价稍低
-        stop_loss_price = round(last_high * 1.005, 2) # 止损设置在波段高点上方
+        # 修正逻辑: 追空时，触发价 > 挂单价，止损价 > 挂单价
+        sell_trigger_price = round(current_price * 1.002, 2)  # 触发价设置在现价上方
+        sell_order_price = round(current_price * 1.001, 2)    # 挂单价略低于触发价，形成限价卖单
+        stop_loss_price = round(last_high * 1.005, 2)      # 止损设置在波段高点上方
         risk_amount = stop_loss_price - sell_order_price
         take_profit_price = round(sell_order_price - risk_amount * 3, 2)
 
         sell_remark = (
-            f"主趋势分析: {main_trend}，日线EMA20之下，市场弱势。|"
+            f"主趋势分析: {main_trend}, 日线EMA20之下，市场看空。|"
             f"波段结构分析: {wave_analysis}|"
-            f"入场信号分析: 15分钟线出现显著放量({volumes_15m[-1]:.0f} > {avg_volume_15m*1.5:.0f})，动能增强。|"
-            f"核心策略: 趋势黄金三角 (多周期共振)。|"
-            f"风险评估: 盈亏比大于3:1，止损设置于关键结构位上方，风险可控。"
+            f"入场信号分析: 15分钟线放量({volumes_15m[-1]:.0f})，确认入场动能。|"
+            f"核心策略: 趋势黄金三角 (多周期共振).|"
+            f"风险评估: 盈亏比大于3:1，止损位于关键结构位上方，风险可控。"
         )
         orders.append(create_order("ETH趋势追空", "SELL", sell_trigger_price, sell_order_price, stop_loss_price, take_profit_price, investment_amount, leverage, sell_remark))
 

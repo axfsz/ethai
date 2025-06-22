@@ -71,57 +71,48 @@ HISTORY_FILE = "last_strategy.json"
 def generate_order_strategy_message(orders: list) -> str:
     from datetime import datetime, timedelta
     now = (datetime.utcnow() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M (北京时间)")
-    
-    if not orders:
-        return f"<b>ETH策略分析</b>\n\n`当前无明确交易信号`\n\n⏰ <i>{now}</i>"
 
-    message = f"<b>📈 ETH 趋势黄金三角策略</b>\n\n"
+    if not orders:
+        return f"<b>📉 ETH 策略分析</b>\n\n<i>当前无明确交易信号，市场方向不明，建议保持观望。</i>\n\n⏰ <i>{now}</i>"
+
+    message = f"<b>📈 ETH 趋势黄金三角策略分析</b>\n<pre>--------------------------</pre>\n"
 
     for order in orders:
-        direction_icon = "🟢" if order.get('direction', '').upper() == 'BUY' else "🔴"
-        direction_text = "追多" if order.get('direction', '').upper() == 'BUY' else "追空"
+        direction_icon = "🟢 追多 (BUY)" if order.get('direction', '').upper() == 'BUY' else "🔴 追空 (SELL)"
 
-        # 解析新的备注信息 (assuming '|' separated key:value pairs)
         remark = order.get('remark', '')
         analysis = {
-            '主趋势': 'N/A',
-            '波段结构': 'N/A',
-            '入场动能': 'N/A',
+            '主趋势分析': 'N/A',
+            '波段结构分析': 'N/A',
+            '入场信号分析': 'N/A',
             '风险评估': 'N/A'
         }
         if remark:
             try:
-                analysis_map = {}
-                parts = [p.strip() for p in remark.split('|')]
+                parts = [p.strip() for p in remark.split('|') if p.strip()]
                 for part in parts:
                     if ':' in part:
                         key, value = part.split(':', 1)
-                        analysis_map[key.strip()] = value.strip()
-
-                # 修正键名和提取逻辑
-                analysis['主趋势'] = analysis_map.get('主趋势分析', 'N/A')
-                analysis['波段结构'] = analysis_map.get('波段结构分析', 'N/A')
-                analysis['入场动能'] = analysis_map.get('入场信号分析', 'N/A') # 键名修正
-                analysis['风险评估'] = analysis_map.get('风险评估', 'N/A')
-
+                        analysis[key.strip()] = value.strip()
             except Exception as e:
-                app.logger.error(f"Error parsing remark '{remark}': {e}")
+                app.logger.error(f"解析备注失败 '{remark}': {e}")
 
         message += (
-            f"{direction_icon} <b>ETH {direction_text}策略</b>\n"
-            f"- <b>触发信号:</b> `{order.get('trigger_signal', 'N/A')}`\n"
-            f"- <b>挂单价格:</b> `{order.get('order_price', 'N/A')}`\n"
-            f"- <b>止损价格:</b> `{order.get('stop_loss', 'N/A')}`\n"
-            f"- <b>止盈价格:</b> `{order.get('take_profit', 'N/A')}`\n\n"
-            f"<b>- - - - - 策略分析 - - - - -</b>\n"
-            f"▫️ <b>主趋势:</b> {analysis['主趋势']}\n"
-            f"▫️ <b>波段结构:</b> {analysis['波段结构']}\n"
-            f"▫️ <b>入场动能:</b> {analysis['入场动能']}\n"
-            f"▫️ <b>风险评估:</b> {analysis['风险评估']}\n\n"
+            f"<b>🔹 策略方向: {direction_icon}</b>\n"
+            f"   - <b>触发信号:</b> <code>{order.get('trigger_signal', 'N/A')}</code>\n"
+            f"   - <b>挂单价格:</b> <code>{order.get('order_price', 'N/A')}</code>\n"
+            f"   - <b>止损防守:</b> <code>{order.get('stop_loss', 'N/A')}</code>\n"
+            f"   - <b>止盈目标:</b> <code>{order.get('take_profit', 'N/A')}</code>\n\n"
+            f"<b>- - - - - 策略逻辑拆解 - - - - -</b>\n"
+            f"   ▫️ <b>主趋势判断:</b> <i>{analysis.get('主趋势分析')}</i>\n"
+            f"   ▫️ <b>波段结构识别:</b> <i>{analysis.get('波段结构分析')}</i>\n"
+            f"   ▫️ <b>入场信号确认:</b> <i>{analysis.get('入场信号分析')}</i>\n"
+            f"   ▫️ <b>综合风险评估:</b> <i>{analysis.get('风险评估')}</i>\n\n"
         )
 
     message += f"<pre>====================</pre>\n"
-    message += f"⏰ <i>生成时间: {now}</i>"
+    message += f"<i>免责声明：以上内容仅为AI策略分析，不构成任何投资建议。</i>\n"
+    message += f"⏰ <b>生成时间:</b> {now}"
     return message
 
 # 对比策略内容和信号差值
