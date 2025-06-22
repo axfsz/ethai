@@ -6,9 +6,9 @@ import numpy as np
 import openpyxl
 from openpyxl.styles import Font, Alignment
 import logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s', filename='log.file', filemode='a')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-# 获取币安 ETHUSDT 最新价格和K线数据
+# 获取币安 ETHUSDT 最新价格和多时间框架K线数据
 def get_binance_data():
     try:
         # 获取最新价格
@@ -16,146 +16,168 @@ def get_binance_data():
         price_resp = requests.get(ticker_url).json()
         current_price = float(price_resp['price'])
 
-        # 获取最近 50 根1分钟K线
-        kline_url = "https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=1m&limit=50"
-        kline_resp = requests.get(kline_url).json()
+        # 根据k.md，获取多个时间框架的K线数据
+        # 日线数据，用于判断主趋势
+        kline_url_1d = "https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=1d&limit=30"
+        klines_1d = requests.get(kline_url_1d).json()
 
-        closes = [float(candle[4]) for candle in kline_resp]
+        # 4小时数据，用于识别波段结构
+        kline_url_4h = "https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=4h&limit=200"
+        klines_4h = requests.get(kline_url_4h).json()
 
-        ma5 = sum(closes[-5:]) / 5
-        ma20 = sum(closes[-20:]) / 20
+        # 15分钟数据，用于精确入场
+        kline_url_15m = "https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=15m&limit=50"
+        klines_15m = requests.get(kline_url_15m).json()
 
         return {
             "current_price": current_price,
-            "ma5": ma5,
-            "ma20": ma20,
-            "klines": kline_resp
+            "klines_1d": klines_1d,
+            "klines_4h": klines_4h,
+            "klines_15m": klines_15m
         }
 
     except Exception as e:
-        logging.error(f"获取数据失败: {e}")
+        logging.error(f"获取多时间框架数据失败: {e}")
         return None
 
-# 缠论分型分析
-def find_fractals(klines):
-    if len(klines) < 3:
-        return "K线数量不足，无法分析分型"
+# --- 辅助计算函数 ---
+def calc_ema(data, period):
+    if len(data) < period:
+        return np.array([np.mean(data)])
+    ema = [sum(data[:period]) / period]
+    alpha = 2 / (period + 1)
+    for price in data[period:]:
+        ema.append(alpha * price + (1 - alpha) * ema[-1])
+    return np.array(ema)
 
-    highs = np.array([float(k[2]) for k in klines])
-    lows = np.array([float(k[3]) for k in klines])
+def detect_swings(klines, order=5):
+    """更精确的波段高低点检测."""
+    highs = pd.Series([float(k[2]) for k in klines])
+    lows = pd.Series([float(k[3]) for k in klines])
+    
+    # 使用scipy.signal.argrelextrema寻找局部极值点
+    from scipy.signal import argrelextrema
+    
+    # 寻找高点 (order参数定义了在转折点一侧需要多少个点来确认)
+    high_indices = argrelextrema(highs.values, np.greater_equal, order=order)[0]
+    # 寻找低点
+    low_indices = argrelextrema(lows.values, np.less_equal, order=order)[0]
+    
+    swing_highs = [(i, highs[i]) for i in high_indices]
+    swing_lows = [(i, lows[i]) for i in low_indices]
+    
+    return swing_highs, swing_lows
 
-    # 顶分型: 中间K线的最高价是3根K线中最高的
-    top_fractal = (highs[-2] > highs[-3]) and (highs[-2] > highs[-1])
-    # 底分型: 中间K线的最低价是3根K线中最低的
-    bottom_fractal = (lows[-2] < lows[-3]) and (lows[-2] < lows[-1])
-
-    if top_fractal:
-        return "缠论分析: 最近3根K线形成顶分型，可能看跌。"
-    elif bottom_fractal:
-        return "缠论分析: 最近3根K线形成底分型，可能看涨。"
+def create_order(name, direction, trigger, order_price, sl, tp, investment, leverage, remark):
+    quantity_formula = f'={investment}/{order_price}'
+    if direction == "BUY":
+        profit_formula = f'=({tp}-{order_price})*G2*I2' # Assuming G2 is quantity, I2 is leverage
+        loss_formula = f'=({order_price}-{sl})*G2*I2'
     else:
-        return "缠论分析: 未形成明显分型。"
+        profit_formula = f'=({order_price}-{tp})*G3*I3' # Assuming G3 is quantity, I3 is leverage
+        loss_formula = f'=({sl}-{order_price})*G3*I3'
 
-# 动态生成挂单表
+    return {
+        "策略名称": name,
+        "方向": direction,
+        "触发信号": trigger,
+        "挂单价格": order_price,
+        "止损价格": sl,
+        "止盈价格": tp,
+        "数量": quantity_formula,
+        "杠杆倍数": leverage,
+        "预计盈利": profit_formula,
+        "预计亏损": loss_formula,
+        "备注": remark
+    }
+
+# 动态生成挂单表 (重构版)
 def generate_order_table(market_data, investment_amount, leverage):
     current_price = market_data['current_price']
-    ma5 = market_data['ma5']
-    ma20 = market_data['ma20']
-    klines = market_data['klines']
+    klines_1d = market_data['klines_1d']
+    klines_4h = market_data['klines_4h']
+    klines_15m = market_data['klines_15m']
 
-    # 均线分析
-    if ma5 > ma20:
-        ma_analysis = "分析: MA5上穿MA20金叉，看涨。"
-        ma_conclusion = "结论: 建议追多。"
-    else:
-        ma_analysis = "分析: MA5下穿MA20死叉，看跌。"
-        ma_conclusion = "结论: 建议追空。"
+    # --- 1. 多周期分析 --- 
+    # 日线级别: 判断主趋势 (EMA20)
+    closes_1d = [float(k[4]) for k in klines_1d]
+    ema20_1d = calc_ema(closes_1d, 20)[-1]
+    main_trend = "多头" if current_price > ema20_1d else "空头"
 
-    # 缠论分型分析
-    fractal_analysis = find_fractals(klines)
+    # 4小时级别: 识别波浪结构和关键位
+    highs_4h = [float(k[2]) for k in klines_4h]
+    lows_4h = [float(k[3]) for k in klines_4h]
+    swing_highs, swing_lows = detect_swings(klines_4h)
+    last_high = swing_highs[-1][1] if swing_highs else max(highs_4h)
+    last_low = swing_lows[-1][1] if swing_lows else min(lows_4h)
+    swing_range = abs(last_high - last_low)
 
-    # 为不同策略生成独立的备注
-    buy_remark = f"现价:{current_price:.2f}, MA5:{ma5:.2f}, MA20:{ma20:.2f}. 分析: MA5上穿MA20金叉，看涨。结论: 建议追多。{fractal_analysis}"
-    sell_remark = f"现价:{current_price:.2f}, MA5:{ma5:.2f}, MA20:{ma20:.2f}. 分析: MA5下穿MA20死叉，看跌。结论: 建议追空。{fractal_analysis}"
+    # 15分钟级别: 精确入场信号 (成交量)
+    volumes_15m = [float(k[5]) for k in klines_15m]
+    avg_volume_15m = np.mean(volumes_15m[-20:])
+    is_volume_breakout = volumes_15m[-1] > avg_volume_15m * 1.5
 
-    # --- Time Estimation ---
-    buy_trigger_price = round(current_price * 1.04, 2)
-    sell_trigger_price = round(current_price * 0.96, 2)
-    time_to_buy_trigger = estimate_time_to_trigger(klines, current_price, buy_trigger_price)
-    time_to_sell_trigger = estimate_time_to_trigger(klines, current_price, sell_trigger_price)
+    # --- 2. 策略决策: 趋势黄金三角 (波浪+EMA+放量) ---
+    # 精确波段分析
+    wave_analysis = "结构不明"
+    if main_trend == "多头":
+        if swing_lows and current_price > swing_lows[-1][1]:
+            if len(swing_lows) > 1 and swing_lows[-1][1] > swing_lows[-2][1]:
+                wave_analysis = f"上升趋势延续，形成更高低点({swing_lows[-1][1]:.2f})，确认支撑。"
+            else:
+                wave_analysis = f"价格在关键支撑({last_low:.2f})上方运行，可能启动新一轮上涨。"
+        else:
+            wave_analysis = f"处于回调阶段，关注下方支撑({last_low:.2f})的有效性。"
+    elif main_trend == "空头":
+        if swing_highs and current_price < swing_highs[-1][1]:
+            if len(swing_highs) > 1 and swing_highs[-1][1] < swing_highs[-2][1]:
+                wave_analysis = f"下降趋势延续，形成更低高点({swing_highs[-1][1]:.2f})，确认阻力。"
+            else:
+                wave_analysis = f"价格在关键阻力({last_high:.2f})下方运行，可能启动新一轮下跌。"
+        else:
+            wave_analysis = f"处于反弹阶段，关注上方阻力({last_high:.2f})的有效性。"
 
-    # --- BUY Strategy Calculations ---
-    buy_order_price = round(current_price * 1.04 + 5, 2)
-    buy_stop_loss_price = round(buy_order_price * 0.98, 2)
-    buy_loss_per_unit = buy_order_price - buy_stop_loss_price
-    buy_take_profit_price = round(buy_order_price + (buy_loss_per_unit * 3), 2)
-    # --- SELL Strategy Calculations ---
-    sell_order_price = round(current_price * 0.96 - 5, 2)
-    sell_stop_loss_price = round(sell_order_price * 1.02, 2)
-    sell_loss_per_unit = sell_stop_loss_price - sell_order_price
-    sell_take_profit_price = round(sell_order_price - (sell_loss_per_unit * 3), 2)
+    # --- 3. 生成交易订单 --- 
+    orders = []
+    # 买入策略: 主趋势多头 + 4H回调结束 + 15M放量突破
+    if main_trend == "多头" and is_volume_breakout:
+        # 修正逻辑: 追多时，触发价 > 挂单价，止损价 < 挂单价
+        buy_order_price = round(current_price * (1 - 0.001), 2) # 挂单价比现价稍低
+        buy_trigger_price = round(current_price * (1 + 0.001), 2) # 触发价比现价稍高
+        stop_loss_price = round(last_low * 0.995, 2) # 止损设置在波段低点下方
+        risk_amount = buy_order_price - stop_loss_price
+        take_profit_price = round(buy_order_price + risk_amount * 3, 2)
 
-    # 使用Excel公式动态计算
-    # H: 投资资金, D: 挂单价格, I: 杠杆倍数, F: 止盈价格, E: 止损价格
-    buy_quantity_formula = f'=H2/D2'
-    sell_quantity_formula = f'=H3/D3'
+        buy_remark = (
+            f"主趋势分析: {main_trend}，日线EMA20之上，市场强势。|"
+            f"波段结构分析: {wave_analysis}|"
+            f"入场信号分析: 15分钟线出现显著放量({volumes_15m[-1]:.0f} > {avg_volume_15m*1.5:.0f})，动能增强。|"
+            f"核心策略: 趋势黄金三角 (多周期共振)。|"
+            f"风险评估: 盈亏比大于3:1，止损设置于关键结构位下方，风险可控。"
+        )
+        orders.append(create_order("ETH趋势追多", "BUY", buy_trigger_price, buy_order_price, stop_loss_price, take_profit_price, investment_amount, leverage, buy_remark))
 
-    buy_estimated_profit = f'=(F2-D2)*G2*I2'
-    buy_estimated_loss = f'=(D2-E2)*G2*I2'
-    sell_estimated_profit = f'=(D3-F3)*G3*I3'
-    sell_estimated_loss = f'=(E3-D3)*G3*I3'
+    # 卖出策略: 主趋势空头 + 4H反弹结束 + 15M放量突破
+    if main_trend == "空头" and is_volume_breakout:
+        # 修正逻辑: 追空时，触发价 < 挂单价，止损价 > 挂单价
+        sell_order_price = round(current_price * (1 + 0.001), 2) # 挂单价比现价稍高
+        sell_trigger_price = round(current_price * (1 - 0.001), 2) # 触发价比现价稍低
+        stop_loss_price = round(last_high * 1.005, 2) # 止损设置在波段高点上方
+        risk_amount = stop_loss_price - sell_order_price
+        take_profit_price = round(sell_order_price - risk_amount * 3, 2)
 
-    orders = [
-        {
-            "策略名称": "ETH突破追多",
-            "方向": "BUY",
-            "触发价格": round(current_price * 1.04, 2),
-            "挂单价格": buy_order_price,
-            "止损价格": buy_stop_loss_price,
-            "止盈价格": buy_take_profit_price,
-            "数量": buy_quantity_formula,
-            "投资资金": investment_amount,
-            "杠杆倍数": leverage,
-            "预计盈利": buy_estimated_profit,
-            "预计亏损": buy_estimated_loss,
-            "预计到达时间": time_to_buy_trigger,
-            "备注": buy_remark
-        },
-        {
-            "策略名称": "ETH突破追空",
-            "方向": "SELL",
-            "触发价格": round(current_price * 0.96, 2),
-            "挂单价格": sell_order_price,
-            "止损价格": sell_stop_loss_price,
-            "止盈价格": sell_take_profit_price,
-            "数量": sell_quantity_formula,
-            "投资资金": investment_amount,
-            "杠杆倍数": leverage,
-            "预计盈利": sell_estimated_profit,
-            "预计亏损": sell_estimated_loss,
-            "预计到达时间": time_to_sell_trigger,
-            "备注": sell_remark
-        }
-    ]
+        sell_remark = (
+            f"主趋势分析: {main_trend}，日线EMA20之下，市场弱势。|"
+            f"波段结构分析: {wave_analysis}|"
+            f"入场信号分析: 15分钟线出现显著放量({volumes_15m[-1]:.0f} > {avg_volume_15m*1.5:.0f})，动能增强。|"
+            f"核心策略: 趋势黄金三角 (多周期共振)。|"
+            f"风险评估: 盈亏比大于3:1，止损设置于关键结构位上方，风险可控。"
+        )
+        orders.append(create_order("ETH趋势追空", "SELL", sell_trigger_price, sell_order_price, stop_loss_price, take_profit_price, investment_amount, leverage, sell_remark))
 
     return pd.DataFrame(orders)
 
-# 预测到达触发价格的时间
-def estimate_time_to_trigger(klines, current_price, trigger_price):
-    if not klines or len(klines) < 10:
-        return "数据不足"
 
-    # 计算最近10根K线的平均波动幅度
-    recent_klines = klines[-10:]
-    avg_range = np.mean([float(k[2]) - float(k[3]) for k in recent_klines]) # high - low
-
-    if avg_range == 0:
-        return "市场无波动"
-
-    price_diff = abs(trigger_price - current_price)
-    estimated_minutes = price_diff / avg_range
-
-    return f"约 {estimated_minutes:.1f} 分钟"
 
 import schedule
 import time
@@ -170,7 +192,7 @@ def scheduled_task():
     logging.info("正在获取实时市场数据...")
     data = get_binance_data()
     if data:
-        logging.info(f"当前价格: {data['current_price']}, MA5: {data['ma5']:.2f}, MA20: {data['ma20']:.2f}")
+        logging.info(f"当前价格: {data['current_price']}")
 
         # 生成新的挂单表 DataFrame
         df = generate_order_table(data, investment_amount, leverage)
@@ -242,30 +264,23 @@ def scheduled_task():
     else:
         logging.error("❌ 获取市场数据失败，未生成挂单表")
 
-# 定时任务线程
-def run_scheduler():
-    # 立即执行一次
-    scheduled_task()
-    
-    # 设置每小时执行一次
-    schedule.every(1).hours.do(scheduled_task)
+# 定时任务主循环
+def main():
+    logging.info("服务启动，立即执行一次初始任务...")
+    scheduled_task()  # 启动时立即执行一次
+
+    schedule.every(1).hour.do(scheduled_task)
+    logging.info("定时任务已设置为每小时执行一次。")
     
     while True:
         schedule.run_pending()
-        time.sleep(60)
+        time.sleep(1)
 
 # 主逻辑
 if __name__ == "__main__":
-    # 启动定时任务线程
-    scheduler_thread = Thread(target=run_scheduler)
-    scheduler_thread.daemon = True
-    scheduler_thread.start()
-    
-    logging.info("✅ 定时策略服务已启动，每两小时自动分析市场行情并生成策略")
+    logging.info("✅ 定时策略服务已启动，每小时自动分析市场行情并生成策略")
     logging.info("按 Ctrl+C 退出...")
-    
     try:
-        while True:
-            time.sleep(1)
+        main()
     except KeyboardInterrupt:
         logging.info("\n服务已停止")

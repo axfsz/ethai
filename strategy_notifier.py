@@ -4,6 +4,7 @@ import os
 import pandas as pd
 from datetime import datetime
 from flask import Flask, request
+import json
 
 app = Flask(__name__)
 
@@ -16,12 +17,7 @@ TELEGRAM_TOKEN = DEFAULT_TELEGRAM_TOKEN
 TELEGRAM_CHAT_IDS = DEFAULT_TELEGRAM_CHAT_IDS.copy()
 
 # ================== 日志配置 ==================
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s %(levelname)s %(message)s',
-    filename='log.file',
-    filemode='a'
-)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 # ================== 通用函数 ==================
 def send_telegram(message: str) -> bool:
@@ -31,7 +27,7 @@ def send_telegram(message: str) -> bool:
         payload = {
             "chat_id": chat_id.strip(),
             "text": message,
-            "parse_mode": "Markdown",
+            "parse_mode": "HTML",
             "disable_web_page_preview": True
         }
         try:
@@ -55,7 +51,7 @@ def load_order_data_from_excel(file_path: str) -> list:
         order = {
             'strategy': str(row.get('策略名称', '')).strip(),
             'direction': str(row.get('方向', '')).strip(),
-            'trigger_price': row.get('触发价格', ''),
+            'trigger_signal': row.get('触发信号', ''),
             'order_price': row.get('挂单价格', ''),
             'stop_loss': row.get('止损价格', ''),
             'take_profit': row.get('止盈价格', ''),
@@ -64,44 +60,117 @@ def load_order_data_from_excel(file_path: str) -> list:
             'leverage': row.get('杠杆倍数', ''),
             'profit': row.get('预计盈利', ''),
             'loss': row.get('预计亏损', ''),
-            'eta': row.get('预计到达时间', ''),
             'remark': str(row.get('备注', '')).strip(),
             'symbol': 'ETH'
         }
         orders.append(order)
     return orders
 
+HISTORY_FILE = "last_strategy.json"
+
 def generate_order_strategy_message(orders: list) -> str:
     from datetime import datetime, timedelta
     now = (datetime.utcnow() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M (北京时间)")
-    message = ""
+    
+    if not orders:
+        return f"<b>ETH策略分析</b>\n\n`当前无明确交易信号`\n\n⏰ <i>{now}</i>"
+
+    message = f"<b>📈 ETH 趋势黄金三角策略</b>\n\n"
+
     for order in orders:
+        direction_icon = "🟢" if order.get('direction', '').upper() == 'BUY' else "🔴"
+        direction_text = "追多" if order.get('direction', '').upper() == 'BUY' else "追空"
+
+        # 解析新的备注信息 (assuming '|' separated key:value pairs)
+        remark = order.get('remark', '')
+        analysis = {
+            '主趋势': 'N/A',
+            '波段结构': 'N/A',
+            '入场动能': 'N/A',
+            '风险评估': 'N/A'
+        }
+        if remark:
+            try:
+                analysis_map = {}
+                parts = [p.strip() for p in remark.split('|')]
+                for part in parts:
+                    if ':' in part:
+                        key, value = part.split(':', 1)
+                        analysis_map[key.strip()] = value.strip()
+
+                # 修正键名和提取逻辑
+                analysis['主趋势'] = analysis_map.get('主趋势分析', 'N/A')
+                analysis['波段结构'] = analysis_map.get('波段结构分析', 'N/A')
+                analysis['入场动能'] = analysis_map.get('入场信号分析', 'N/A') # 键名修正
+                analysis['风险评估'] = analysis_map.get('风险评估', 'N/A')
+
+            except Exception as e:
+                app.logger.error(f"Error parsing remark '{remark}': {e}")
+
         message += (
-            f"🚀 *{order['strategy']}*\n\n"
-            f"📊 *方向:* {order['direction']}\n"
-            f"- 触发价格: {order['trigger_price']}\n"
-            f"- 挂单价格: {order['order_price']}\n"
-            f"- 止盈价格: {order['take_profit']}\n"
-            f"- 止损价格: {order['stop_loss']}\n"
-            f"- 预计到达时间: {order['eta']}\n\n"
+            f"{direction_icon} <b>ETH {direction_text}策略</b>\n"
+            f"- <b>触发信号:</b> `{order.get('trigger_signal', 'N/A')}`\n"
+            f"- <b>挂单价格:</b> `{order.get('order_price', 'N/A')}`\n"
+            f"- <b>止损价格:</b> `{order.get('stop_loss', 'N/A')}`\n"
+            f"- <b>止盈价格:</b> `{order.get('take_profit', 'N/A')}`\n\n"
+            f"<b>- - - - - 策略分析 - - - - -</b>\n"
+            f"▫️ <b>主趋势:</b> {analysis['主趋势']}\n"
+            f"▫️ <b>波段结构:</b> {analysis['波段结构']}\n"
+            f"▫️ <b>入场动能:</b> {analysis['入场动能']}\n"
+            f"▫️ <b>风险评估:</b> {analysis['风险评估']}\n\n"
         )
-        if order['remark']:
-            message += f"📌 策略分析: {order['remark']}\n\n"
-    message += f"⏰ 生成时间: {now}"
+
+    message += f"<pre>====================</pre>\n"
+    message += f"⏰ <i>生成时间: {now}</i>"
     return message
+
+# 对比策略内容和信号差值
+def is_strategy_changed(new_orders, threshold=5):
+    try:
+        if os.path.exists(HISTORY_FILE):
+            with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
+                last_orders = json.load(f)
+        else:
+            last_orders = None
+    except Exception:
+        last_orders = None
+    if not last_orders:
+        return True
+    def get_signal(order):
+        try:
+            # 修正键名
+            return float(order.get('trigger_signal', 0))
+        except (ValueError, TypeError):
+            return 0
+    for new, old in zip(new_orders, last_orders):
+        if new['direction'] == old['direction']:
+            if abs(get_signal(new) - get_signal(old)) < threshold and new['remark'] == old['remark']:
+                continue
+            else:
+                return True
+    return False
+
+def save_strategy(orders):
+    try:
+        with open(HISTORY_FILE, 'w', encoding='utf-8') as f:
+            json.dump(orders, f, ensure_ascii=False)
+    except Exception as e:
+        app.logger.error(f"保存策略历史失败: {e}")
 
 def notify_order_strategy(file_path: str):
     orders = load_order_data_from_excel(file_path)
     if not orders:
         app.logger.warning("未加载到挂单策略数据")
         return
-
-    for order in orders:
-        msg = generate_order_strategy_message(order)
-        if send_telegram(msg):
-            app.logger.info(f"挂单策略通知发送成功 | 币种: {order['symbol']} | 买入价: {order['buy_price']}")
-        else:
-            app.logger.error(f"挂单策略通知发送失败 | 内容: {order}")
+    if not is_strategy_changed(orders):
+        app.logger.info("策略内容与历史无明显变化或信号差值小于5，未发送通知。")
+        return
+    msg = generate_order_strategy_message(orders)
+    if send_telegram(msg):
+        app.logger.info("挂单策略通知发送成功")
+        save_strategy(orders)
+    else:
+        app.logger.error(f"挂单策略通知发送失败 | 内容: {msg}")
 
 # ================== HTTP 接口 ==================
 @app.route("/notify_order_strategy", methods=["POST"])

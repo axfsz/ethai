@@ -20,8 +20,17 @@ EXPOSE 5001
 # 安装supervisor
 RUN apt-get update && apt-get install -y supervisor
 
+
+# 创建并授权日志目录
+RUN mkdir -p /var/log 
+
+# 授权应用目录
+RUN chown -R appuser:appuser /app
+
 # 配置supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# 切换到非root用户
 
 # 启动服务
 CMD ["/usr/bin/supervisord"]
