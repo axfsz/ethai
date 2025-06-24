@@ -89,6 +89,26 @@ def find_zhongshu(segments):
         if overlap_start < overlap_end:
             zhongshus.append({'start': overlap_start, 'end': overlap_end, 'index': i})
     return zhongshus
+
+# === 新增：中枢后买卖点识别函数 ===
+def find_first_second_buy_sell(strokes, zhongshus):
+    """根据笔中和枢，返回最新一组中枢后的买卖点（简化版）"""
+    if not strokes or not zhongshus:
+        return None, None
+    zs = zhongshus[-1]
+    buy = None
+    sell = None
+    # 找到中枢后的第一笔为多，第二笔为空
+    for i in range(zs['index']+3, len(strokes)):
+        s = strokes[i]
+        if s['type'] == 'up' and not buy:
+            buy = {'price': s['end_price'], 'zs': zs, 'type': '第一买'}
+        if s['type'] == 'down' and not sell:
+            sell = {'price': s['end_price'], 'zs': zs, 'type': '第一卖'}
+        if buy and sell:
+            break
+    return buy, sell
+
 def find_fractals(klines):
     """识别分型"""
     fractals = []
@@ -332,22 +352,3 @@ if __name__ == "__main__":
             logging.error(f"程序发生未知错误: {e}")
             logging.info("发生错误，等待5分钟后重试...")
             time.sleep(300) # 发生错误时，等待5分钟再重试
-
-
-def find_first_second_buy_sell(strokes, zhongshus):
-    """根据笔和中枢，返回最新一组中枢后的买卖点（简化版）"""
-    if not strokes or not zhongshus:
-        return None, None
-    zs = zhongshus[-1]
-    buy = None
-    sell = None
-    # 找到中枢后的第一笔为多，第二笔为空
-    for i in range(zs['index']+3, len(strokes)):
-        s = strokes[i]
-        if s['type'] == 'up' and not buy:
-            buy = {'price': s['end_price'], 'zs': zs, 'type': '第一买'}
-        if s['type'] == 'down' and not sell:
-            sell = {'price': s['end_price'], 'zs': zs, 'type': '第一卖'}
-        if buy and sell:
-            break
-    return buy, sell
