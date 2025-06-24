@@ -50,23 +50,59 @@ def calc_ema(data, period):
         ema.append(alpha * price + (1 - alpha) * ema[-1])
     return np.array(ema)
 
-def detect_swings(klines, order=5):
-    """更精确的波段高低点检测."""
-    highs = pd.Series([float(k[2]) for k in klines])
-    lows = pd.Series([float(k[3]) for k in klines])
-    
-    # 使用scipy.signal.argrelextrema寻找局部极值点
-    from scipy.signal import argrelextrema
-    
-    # 寻找高点 (order参数定义了在转折点一侧需要多少个点来确认)
-    high_indices = argrelextrema(highs.values, np.greater_equal, order=order)[0]
-    # 寻找低点
-    low_indices = argrelextrema(lows.values, np.less_equal, order=order)[0]
-    
-    swing_highs = [(i, highs[i]) for i in high_indices]
-    swing_lows = [(i, lows[i]) for i in low_indices]
-    
-    return swing_highs, swing_lows
+# --- 缠论核心分析函数 ---
+
+def find_fractals(klines):
+    """识别分型"""
+    fractals = []
+    # 忽略最新K线，因为它尚未走完
+    for i in range(2, len(klines) - 2):
+        highs = [float(k[2]) for k in klines[i-2:i+3]]
+        lows = [float(k[3]) for k in klines[i-2:i+3]]
+
+        # 顶分型: 中间K线的最高点是5根中最高的
+        if highs[2] == max(highs):
+            fractals.append({'index': i, 'type': 'top', 'price': highs[2], 'time': klines[i][0]})
+        
+        # 底分型: 中间K线的最低点是5根中最低的
+        if lows[2] == min(lows):
+            fractals.append({'index': i, 'type': 'bottom', 'price': lows[2], 'time': klines[i][0]})
+            
+    return fractals
+
+def find_strokes(fractals):
+    """从分型构建笔"""
+    if not fractals:
+        return []
+
+    strokes = []
+    last_fractal = fractals[0]
+
+    for i in range(1, len(fractals)):
+        current_fractal = fractals[i]
+        
+        # 确保顶底分型交替出现
+        if current_fractal['type'] == last_fractal['type']:
+            # 如果连续出现同类型分型，保留价格更高(顶)或更低(底)的那个
+            if current_fractal['type'] == 'top' and current_fractal['price'] > last_fractal['price']:
+                last_fractal = current_fractal
+            elif current_fractal['type'] == 'bottom' and current_fractal['price'] < last_fractal['price']:
+                last_fractal = current_fractal
+        else:
+            # 出现交替的分型，形成一笔
+            # 检查K线数量是否大于等于5根 (缠论要求)
+            if abs(current_fractal['index'] - last_fractal['index']) >= 4:
+                stroke_type = 'up' if last_fractal['type'] == 'bottom' else 'down'
+                strokes.append({
+                    'start_price': last_fractal['price'],
+                    'end_price': current_fractal['price'],
+                    'start_time': last_fractal['time'],
+                    'end_time': current_fractal['time'],
+                    'type': stroke_type
+                })
+                last_fractal = current_fractal
+
+    return strokes
 
 def create_order(name, direction, trigger, order_price, sl, tp, investment, leverage, analysis):
     quantity_formula = f'={investment}/{order_price}'
@@ -91,81 +127,90 @@ def create_order(name, direction, trigger, order_price, sl, tp, investment, leve
         "策略分析": analysis
     }
 
-# 动态生成挂单表 (V3 - 核心逻辑重构)
+# 动态生成挂单表 (V4 - 基于缠论思想)
 def generate_order_table(market_data, investment_amount, leverage):
     current_price = market_data['current_price']
-    klines_4h = market_data['klines_4h']
-    klines_1h = market_data['klines_1h']
-    klines_15m = market_data['klines_15m']
     orders = []
 
-    # --- 1. 核心信号分析 --- 
-    # 信号1: 4H级别主趋势 (EMA20)
-    closes_4h = [float(k[4]) for k in klines_4h]
-    ema20_4h = calc_ema(closes_4h, 20)[-1]
-    main_trend = "多头" if current_price > ema20_4h else "空头"
-    trend_analysis = f"4H EMA20判断为{main_trend}趋势 (现价:{current_price:.2f} vs EMA:{ema20_4h:.2f})。"
+    # --- 1. 多级别缠论结构分析 ---
+    # 15分钟级别，用于寻找短期交易机会
+    fractals_15m = find_fractals(market_data['klines_15m'])
+    strokes_15m = find_strokes(fractals_15m)
 
-    # 信号2: 1H级别波浪推进结构
-    swing_highs_1h, swing_lows_1h = detect_swings(klines_1h, order=5)
-    is_up_propulsion = False
-    is_down_propulsion = False
-    wave_analysis = "结构不明"
+    # 1小时级别，用于确认长期趋势
+    fractals_1h = find_fractals(market_data['klines_1h'])
+    strokes_1h = find_strokes(fractals_1h)
 
-    if len(swing_lows_1h) >= 2 and len(swing_highs_1h) >= 2:
-        # 上升推进: 更高的高点和更高的低点
-        if swing_highs_1h[-1][1] > swing_highs_1h[-2][1] and swing_lows_1h[-1][1] > swing_lows_1h[-2][1]:
-            is_up_propulsion = True
-            wave_analysis = f"1H形成上升推进结构 (高点:{swing_highs_1h[-1][1]:.2f} > {swing_highs_1h[-2][1]:.2f}, 低点:{swing_lows_1h[-1][1]:.2f} > {swing_lows_1h[-2][1]:.2f})。"
-        # 下降推进: 更低的高点和更低的低点
-        elif swing_highs_1h[-1][1] < swing_highs_1h[-2][1] and swing_lows_1h[-1][1] < swing_lows_1h[-2][1]:
-            is_down_propulsion = True
-            wave_analysis = f"1H形成下降推进结构 (高点:{swing_highs_1h[-1][1]:.2f} < {swing_highs_1h[-2][1]:.2f}, 低点:{swing_lows_1h[-1][1]:.2f} < {swing_lows_1h[-2][1]:.2f})。"
-    else:
-        wave_analysis = "1H波浪结构不明确，无法确认推进。"
+    # --- 2. 寻找交易信号 ---
+    # 缠论的买卖点判断逻辑非常复杂，这里我们先简化实现一个基于“笔”的背驰策略
+    # 即：寻找一个下跌笔的力度比前一个下跌笔弱，认为是买入信号（底背驰）
+    # 反之，寻找一个上涨笔的力度比前一个上涨笔弱，认为是卖出信号（顶背驰）
 
-    # 信号3: 15M级别突破放量
-    volumes_15m = [float(k[5]) for k in klines_15m]
-    avg_volume_15m = np.mean(volumes_15m[-20:-1]) # 计算最近20根K线的平均成交量（不含当前）
-    is_volume_breakout = volumes_15m[-1] > avg_volume_15m * 2 # 当前成交量是平均的2倍以上
-    volume_analysis = f"15M成交量{'显著放大' if is_volume_breakout else '平稳'} (当前:{volumes_15m[-1]:.0f} vs 平均:{avg_volume_15m:.0f})。"
+    def find_last_buy_signal(strokes):
+        if len(strokes) < 4 or not (strokes[-1]['type'] == 'down' and strokes[-3]['type'] == 'down'):
+            return None
+        
+        last_down_stroke = strokes[-1]
+        prev_down_stroke = strokes[-3]
 
-    # --- 2. 策略决策与订单生成 ---
-    # 追多策略: 4H多头 + 1H上升推进 + 15M放量
-    if main_trend == "多头" and is_up_propulsion and is_volume_breakout:
-        last_low = swing_lows_1h[-1][1]
-        buy_order_price = round(current_price * 1.001, 2)
-        buy_trigger_price = round(current_price, 2)
-        stop_loss_price = round(last_low * 0.99, 2)
-        risk_amount = buy_order_price - stop_loss_price
-        take_profit_price = round(buy_order_price + risk_amount * 3, 2)
+        # 简化背驰判断：当前下跌笔的幅度小于前一个下跌笔
+        if (last_down_stroke['start_price'] - last_down_stroke['end_price']) < (prev_down_stroke['start_price'] - prev_down_stroke['end_price']):
+            # 确保价格没有创新低
+            if last_down_stroke['end_price'] > prev_down_stroke['end_price']:
+                 return {'price': last_down_stroke['end_price'], 'stop_loss': prev_down_stroke['end_price']}
+        return None
 
-        final_analysis = (
-            f"主趋势分析: {trend_analysis}\n"
-            f"波段结构分析: {wave_analysis}\n"
-            f"入场信号分析: {volume_analysis}\n"
-            f"核心策略: 趋势黄金三角 (4H趋势+1H推进+15M放量)。\n"
-            f"风险评估: 盈亏比大于3:1，止损设置于1H关键结构位下方，风险可控。"
-        )
-        orders.append(create_order("ETH趋势追多", "BUY", buy_trigger_price, buy_order_price, stop_loss_price, take_profit_price, investment_amount, leverage, final_analysis))
+    def find_last_sell_signal(strokes):
+        if len(strokes) < 4 or not (strokes[-1]['type'] == 'up' and strokes[-3]['type'] == 'up'):
+            return None
 
-    # 追空策略: 4H空头 + 1H下降推进 + 15M放量
-    if main_trend == "空头" and is_down_propulsion and is_volume_breakout:
-        last_high = swing_highs_1h[-1][1]
-        sell_order_price = round(current_price * 0.999, 2)
-        sell_trigger_price = round(current_price, 2)
-        stop_loss_price = round(last_high * 1.01, 2)
-        risk_amount = stop_loss_price - sell_order_price
-        take_profit_price = round(sell_order_price - risk_amount * 3, 2)
+        last_up_stroke = strokes[-1]
+        prev_up_stroke = strokes[-3]
 
-        final_analysis = (
-            f"主趋势分析: {trend_analysis}\n"
-            f"波段结构分析: {wave_analysis}\n"
-            f"入场信号分析: {volume_analysis}\n"
-            f"核心策略: 趋势黄金三角 (4H趋势+1H推进+15M放量)。\n"
-            f"风险评估: 盈亏比大于3:1，止损设置于1H关键结构位上方，风险可控。"
-        )
-        orders.append(create_order("ETH趋势追空", "SELL", sell_trigger_price, sell_order_price, stop_loss_price, take_profit_price, investment_amount, leverage, final_analysis))
+        if (last_up_stroke['end_price'] - last_up_stroke['start_price']) < (prev_up_stroke['end_price'] - prev_up_stroke['start_price']):
+            if last_up_stroke['end_price'] < prev_up_stroke['end_price']:
+                return {'price': last_up_stroke['end_price'], 'stop_loss': prev_up_stroke['end_price']}
+        return None
+
+    # --- 3. 生成策略 --- 
+    buy_signal_15m = find_last_buy_signal(strokes_15m)
+    sell_signal_15m = find_last_sell_signal(strokes_15m)
+    buy_signal_1h = find_last_buy_signal(strokes_1h)
+    sell_signal_1h = find_last_sell_signal(strokes_1h)
+
+    # 长期单：1h和15m信号共振
+    if buy_signal_1h and buy_signal_15m:
+        order_price = round(current_price * 1.001, 2)
+        stop_loss = round(buy_signal_1h['stop_loss'] * 0.99, 2)
+        risk = order_price - stop_loss
+        take_profit = round(order_price + risk * 3, 2)
+        analysis = f"长期看多信号(1H与15M共振):\n1H级别出现买入结构，止损参考位: {buy_signal_1h['stop_loss']:.2f}。\n15M级别出现买入结构，入场点参考: {buy_signal_15m['price']:.2f}。\n策略: 等待价格回调至入场点附近买入，严格止损。"
+        orders.append(create_order("ETH缠论长线多单", "BUY", current_price, order_price, stop_loss, take_profit, investment_amount, leverage, analysis))
+
+    if sell_signal_1h and sell_signal_15m:
+        order_price = round(current_price * 0.999, 2)
+        stop_loss = round(sell_signal_1h['stop_loss'] * 1.01, 2)
+        risk = stop_loss - order_price
+        take_profit = round(order_price - risk * 3, 2)
+        analysis = f"长期看空信号(1H与15M共振):\n1H级别出现卖出结构，止损参考位: {sell_signal_1h['stop_loss']:.2f}。\n15M级别出现卖出结构，入场点参考: {sell_signal_15m['price']:.2f}。\n策略: 等待价格反弹至入场点附近卖出，严格止损。"
+        orders.append(create_order("ETH缠论长线空单", "SELL", current_price, order_price, stop_loss, take_profit, investment_amount, leverage, analysis))
+
+    # 短期单：仅15m信号
+    elif buy_signal_15m:
+        order_price = round(current_price * 1.001, 2)
+        stop_loss = round(buy_signal_15m['stop_loss'] * 0.995, 2)
+        risk = order_price - stop_loss
+        take_profit = round(order_price + risk * 1.5, 2) # 短期目标放低
+        analysis = f"短期看多信号(15M):\n15M级别出现潜在底背驰买入结构。\n入场点参考: {buy_signal_15m['price']:.2f}，止损参考: {buy_signal_15m['stop_loss']:.2f}。\n策略: 短线操作，快进快出，盈亏比目标1.5:1。"
+        orders.append(create_order("ETH缠论短线多单", "BUY", current_price, order_price, stop_loss, take_profit, investment_amount, leverage, analysis))
+
+    elif sell_signal_15m:
+        order_price = round(current_price * 0.999, 2)
+        stop_loss = round(sell_signal_15m['stop_loss'] * 1.005, 2)
+        risk = stop_loss - order_price
+        take_profit = round(order_price - risk * 1.5, 2)
+        analysis = f"短期看空信号(15M):\n15M级别出现潜在顶背驰卖出结构。\n入场点参考: {sell_signal_15m['price']:.2f}，止损参考: {sell_signal_15m['stop_loss']:.2f}。\n策略: 短线操作，快进快出，盈亏比目标1.5:1。"
+        orders.append(create_order("ETH缠论短线空单", "SELL", current_price, order_price, stop_loss, take_profit, investment_amount, leverage, analysis))
 
     return pd.DataFrame(orders)
 
