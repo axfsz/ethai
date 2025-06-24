@@ -1,23 +1,21 @@
+import ccxt
+import pandas as pd
+import ta
 import logging
 import requests
-import os
-import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import Flask, request
-import json
 
 app = Flask(__name__)
 
-# ================== 配置区 ==================
-DEFAULT_TELEGRAM_TOKEN = '7378390777:AAEPODs9r_J1Y488nUJx-79XcdUiLcAzaos'
-DEFAULT_TELEGRAM_CHAT_IDS = ['6835958824', '-4826150576']
+# Telegram 配置
+TELEGRAM_TOKEN = '7378390777:AAEPODs9r_J1Y488nUJx-79XcdUiLcAzaos'
+TELEGRAM_CHAT_IDS = ['6835958824', '-4826150576']
 REQUEST_TIMEOUT = 10
 
-TELEGRAM_TOKEN = DEFAULT_TELEGRAM_TOKEN
-TELEGRAM_CHAT_IDS = DEFAULT_TELEGRAM_CHAT_IDS.copy()
-
-# ================== 日志配置 ==================
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# 初始化交易所
+exchange = ccxt.binance({'enableRateLimit': True})
+symbol = 'ETH/USDT'
 
 # ================== 通用函数 ==================
 def send_telegram(message: str) -> bool:
@@ -33,161 +31,89 @@ def send_telegram(message: str) -> bool:
         try:
             response = requests.post(url, json=payload, timeout=REQUEST_TIMEOUT)
             if response.status_code != 200:
-                app.logger.error(f"Telegram API异常 | 聊天ID: {chat_id} | 状态码: {response.status_code} | 响应: {response.text.strip()}")
+                app.logger.error(f"Telegram 发送失败 | 聊天ID: {chat_id} | 状态码: {response.status_code} | 响应: {response.text.strip()}")
                 success = False
         except requests.exceptions.RequestException as e:
-            app.logger.error(f"Telegram请求失败 | 聊天ID: {chat_id} | 类型: {type(e).__name__} | 详情: {str(e)}")
+            app.logger.error(f"Telegram 请求异常 | 聊天ID: {chat_id} | 错误: {e}")
             success = False
     return success
 
-def load_order_data_from_excel(file_path: str) -> list:
-    try:
-        # 读取最新的工作表
-        xls = pd.ExcelFile(file_path)
-        sheet_name = xls.sheet_names[-1]
-        df = pd.read_excel(file_path, sheet_name=sheet_name)
-    except Exception as e:
-        app.logger.error(f"读取Excel最新工作表失败: {str(e)}")
-        return []
-    orders = []
-    for _, row in df.iterrows():
-        order = {
-            'strategy': str(row.get('策略名称', '')).strip(),
-            'direction': str(row.get('方向', '')).strip(),
-            'trigger_signal': row.get('触发信号', ''),
-            'order_price': row.get('挂单价格', ''),
-            'stop_loss': row.get('止损价格', ''),
-            'take_profit': row.get('止盈价格', ''),
-            'qty': row.get('数量', ''),
-            'investment': row.get('投资资金', ''),
-            'leverage': row.get('杠杆倍数', ''),
-            'profit': row.get('预计盈利', ''),
-            'loss': row.get('预计亏损', ''),
-            '策略分析': str(row.get('策略分析', '')).strip(), # 修正键名
-            'symbol': 'ETH'
-        }
-        orders.append(order)
-    return orders
+# ================== 策略核心 ==================
+def fetch_ohlcv(symbol, timeframe, limit):
+    ohlcv = exchange.fetch_ohlcv(symbol, timeframe, limit=limit)
+    df = pd.DataFrame(ohlcv, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
+    df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+    return df
 
-HISTORY_FILE = "last_strategy.json"
+def calc_indicators(df):
+    df['ema20'] = ta.trend.ema_indicator(df['close'], window=20)
+    df['macd'], df['macdsignal'], _ = ta.trend.macd(df['close'])
+    df['rsi'] = ta.momentum.rsi(df['close'], window=14)
+    df['volume_ma'] = df['volume'].rolling(window=20).mean()
+    bb = ta.volatility.BollingerBands(df['close'])
+    df['bb_high'] = bb.bollinger_hband()
+    df['bb_low'] = bb.bollinger_lband()
+    return df
 
-def generate_order_strategy_message(orders: list) -> str:
-    from datetime import datetime, timedelta
+def detect_signals():
+    df_1w = calc_indicators(fetch_ohlcv(symbol, '1w', 60))
+    df_1d = calc_indicators(fetch_ohlcv(symbol, '1d', 180))
+    df_4h = calc_indicators(fetch_ohlcv(symbol, '4h', 200))
+    df_1h = calc_indicators(fetch_ohlcv(symbol, '1h', 120))
+
+    signals = []
+    
+    # 周线 EMA20 判断多头趋势
+    if df_1w['ema20'].iloc[-1] > df_1w['ema20'].iloc[-5]:
+        signals.append('周线EMA上升')
+
+    # 日线 RSI 底背离
+    if df_1d['close'].iloc[-1] < df_1d['close'].iloc[-5] and df_1d['rsi'].iloc[-1] > df_1d['rsi'].iloc[-5]:
+        signals.append('日线RSI底背离')
+
+    # 4H 放量突破
+    if (df_4h['close'].iloc[-1] > df_4h['bb_high'].iloc[-1] and
+        df_4h['volume'].iloc[-1] > 1.5 * df_4h['volume_ma'].iloc[-1]):
+        signals.append('4小时放量突破')
+
+    # 1H MACD 金叉
+    if (df_1h['macd'].iloc[-1] > df_1h['macdsignal'].iloc[-1] and
+        df_1h['macd'].iloc[-2] <= df_1h['macdsignal'].iloc[-2]):
+        signals.append('1小时MACD金叉')
+
+    return signals
+
+def generate_strategy_message(signals):
     now = (datetime.utcnow() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M (北京时间)")
-
-    message = f"<b>📈 ETH 趋势黄金三角策略分析</b>\n<pre>--------------------------</pre>\n"
-
-    for order in orders:
-        direction_icon = "🟢 追多 (BUY)" if order.get('direction', '').upper() == 'BUY' else "🔴 追空 (SELL)"
-
-        # 将策略分析内容包裹在<pre>标签中以保持格式
-        analysis_content = order.get('策略分析', '无')
-        analysis_html = f"<pre>{analysis_content}</pre>"
-
-        trigger_signal = order.get('trigger_signal', 'N/A')
-        if isinstance(trigger_signal, (int, float)):
-            trigger_signal = f"{trigger_signal:.2f}"
-
-        message += (
-            f"<b>🔹 策略方向: {direction_icon}</b>\n"
-            f"   - <b>触发信号:</b> <code>{trigger_signal}</code>\n"
-            f"   - <b>挂单价格:</b> <code>{order.get('order_price', 'N/A')}</code>\n"
-            f"   - <b>止损防守:</b> <code>{order.get('stop_loss', 'N/A')}</code>\n"
-            f"   - <b>止盈目标:</b> <code>{order.get('take_profit', 'N/A')}</code>\n\n"
-            f"<b>- - - - - 策略逻辑拆解 - - - - -</b>\n"
-            f"{analysis_html}\n"
-        )
-
+    if len(signals) >= 3:
+        position = "重仓建议 (5%-8%)"
+    elif len(signals) == 2:
+        position = "轻仓建议 (3%-5%)"
+    elif len(signals) == 1:
+        position = "试探单建议 (1%-2%)"
+    else:
+        position = "观望 (无明显交易机会)"
+    
+    message = f"<b>📊 ETH 策略预测</b>\n<pre>--------------------------</pre>\n"
+    message += f"⚡ 检测信号: {', '.join(signals) if signals else '无'}\n"
+    message += f"💡 仓位建议: {position}\n"
     message += f"<pre>====================</pre>\n"
-    message += f"<i>免责声明：以上内容仅为AI策略分析，不构成任何投资建议。</i>\n"
+    message += f"<i>免责声明：以上为AI策略预测，不构成投资建议。</i>\n"
     message += f"⏰ <b>生成时间:</b> {now}"
     return message
 
-# 对比策略内容和信号差值
-def is_strategy_changed(new_orders, threshold=5):
+# ================== Flask 接口 ==================
+@app.route("/predict_strategy", methods=["POST"])
+def predict_strategy():
     try:
-        if os.path.exists(HISTORY_FILE):
-            with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
-                last_orders = json.load(f)
-        else:
-            last_orders = None
-    except Exception:
-        last_orders = None
-    if not last_orders:
-        return True
-    def get_signal(order):
-        try:
-            # 修正键名
-            return float(order.get('trigger_signal', 0))
-        except (ValueError, TypeError):
-            return 0
-    for new, old in zip(new_orders, last_orders):
-        if new['direction'] == old['direction']:
-            if abs(get_signal(new) - get_signal(old)) < threshold and new['remark'] == old['remark']:
-                continue
-            else:
-                return True
-    return False
-
-def save_strategy(orders):
-    try:
-        with open(HISTORY_FILE, 'w', encoding='utf-8') as f:
-            json.dump(orders, f, ensure_ascii=False)
+        signals = detect_signals()
+        msg = generate_strategy_message(signals)
+        send_telegram(msg)
+        return "策略预测已发送", 200
     except Exception as e:
-        app.logger.error(f"保存策略历史失败: {e}")
-
-def notify_order_strategy(file_path: str):
-    orders = load_order_data_from_excel(file_path)
-    if not orders:
-        app.logger.warning("未加载到挂单策略数据")
-        return
-    if not is_strategy_changed(orders):
-        app.logger.info("策略内容与历史无明显变化或信号差值小于5，未发送通知。")
-        return
-    msg = generate_order_strategy_message(orders)
-    if send_telegram(msg):
-        app.logger.info("挂单策略通知发送成功")
-        save_strategy(orders)
-    else:
-        app.logger.error(f"挂单策略通知发送失败 | 内容: {msg}")
-
-# ================== HTTP 接口 ==================
-@app.route("/notify_order_strategy", methods=["POST"])
-def api_notify_order_strategy():
-    file_path = request.args.get("file", "ETH_动态挂单表.xlsx")
-    notify_order_strategy(file_path)
-    return "策略通知已触发", 200
-
-@app.route("/notify_status", methods=["POST"])
-def api_notify_status():
-    from datetime import datetime, timedelta
-    now = (datetime.utcnow() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M (北京时间)")
-    message = f"<b>📉 ETH 策略分析</b>\n\n<i>当前无明确交易信号，市场方向不明，建议保持观望。</i>\n\n⏰ <i>{now}</i>"
-    send_telegram(message)
-    return "状态通知已发送", 200
-
-@app.route("/test_notify", methods=["POST"])
-def test_notify():
-    # 用于测试的模拟订单数据
-    test_orders = [
-        {
-            'direction': 'BUY',
-            'trigger_signal': 2300.50,
-            'order_price': 2305.00,
-            'stop_loss': 2280.00,
-            'take_profit': 2380.00,
-            '策略分析': '主趋势分析: 4H EMA20判断为多头趋势。\n波段结构分析: 1H形成上升推进结构。\n入场信号分析: 15M成交量显著放大。\n核心策略: 趋势黄金三角。\n风险评估: 盈亏比大于3:1，风险可控。'
-        }
-    ]
-    # 测试有策略的通知
-    strategy_msg = generate_order_strategy_message(test_orders)
-    send_telegram(strategy_msg)
-    
-    # 测试无策略的通知
-    api_notify_status()
-    
-    return "测试通知已发送", 200
+        app.logger.error(f"策略预测失败: {e}")
+        return f"策略预测失败: {e}", 500
 
 # ================== 启动 ==================
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5001, debug=False)
