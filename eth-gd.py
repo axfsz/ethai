@@ -352,3 +352,11 @@ if __name__ == "__main__":
             logging.error(f"程序发生未知错误: {e}")
             logging.info("发生错误，等待5分钟后重试...")
             time.sleep(300) # 发生错误时，等待5分钟再重试
+
+
+
+def get_binance_klines(symbol, interval='1h', limit=100):
+    """获取币安指定交易对的K线数据"""
+    url = f"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={interval}&limit={limit}"
+    resp = requests.get(url)
+    return resp.json()
