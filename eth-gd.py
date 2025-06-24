@@ -70,11 +70,25 @@ def find_segments(strokes):
                 'type': segment_type
             }
             segments.append(segment)
-            i += 2
+            i += 3
         else:
             i += 1
     return segments
 
+# === 新增：中枢识别函数 ===
+def find_zhongshu(segments):
+    """简化版中枢识别，返回区间列表，每个区间为{'start': x, 'end': y}"""
+    if not segments or len(segments) < 3:
+        return []
+    zhongshus = []
+    for i in range(len(segments) - 2):
+        s1, s2, s3 = segments[i], segments[i+1], segments[i+2]
+        # 判断三段是否有重叠区间
+        overlap_start = max(min(s1['start_price'], s1['end_price']), min(s2['start_price'], s2['end_price']), min(s3['start_price'], s3['end_price']))
+        overlap_end = min(max(s1['start_price'], s1['end_price']), max(s2['start_price'], s2['end_price']), max(s3['start_price'], s3['end_price']))
+        if overlap_start < overlap_end:
+            zhongshus.append({'start': overlap_start, 'end': overlap_end, 'index': i})
+    return zhongshus
 def find_fractals(klines):
     """识别分型"""
     fractals = []
