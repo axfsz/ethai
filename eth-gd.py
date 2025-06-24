@@ -171,105 +171,54 @@ def generate_order_table(market_data, investment_amount, leverage):
     if sell1_15m:
         analysis = f"15M中枢{sell1_15m['type']}信号，跌破中枢区间[{sell1_15m['zs']['start']:.2f},{sell1_15m['zs']['end']:.2f}]，入场价{sell1_15m['price']:.2f}"
         orders.append(create_order("ETH缠论中枢空单", "SELL", current_price, round(sell1_15m['price'],2), round(sell1_15m['zs']['end'],2), round(sell1_15m['price']-abs(sell1_15m['price']-sell1_15m['zs']['end'])*2,2), investment_amount, leverage, analysis))
-    # ... existing code ...
-def find_zhongshu(segments):
-    """识别中枢（简化版，三段重叠区间）"""
-    if not segments or len(segments) < 3:
-        return []
-    zhongshus = []
-    for i in range(len(segments)-2):
-        s1, s2, s3 = segments[i], segments[i+1], segments[i+2]
-        # 取三段的重叠区间
-        zs_high = min(s1['end_price'], s2['end_price'], s3['end_price'])
-        zs_low = max(s1['start_price'], s2['start_price'], s3['start_price'])
-        if zs_high > zs_low:
-            zhongshus.append({'start':zs_low, 'end':zs_high, 'index':i+2})
-    return zhongshus
-
-def find_first_second_buy_sell(strokes, zhongshus):
-    """识别第一、第二类买卖点（简化版）"""
-    if not zhongshus:
-        return None, None
-    zs = zhongshus[-1]
-    # 第一类买点：离开中枢后一笔向上突破中枢上沿
-    if strokes[-1]['type']=='up' and strokes[-1]['end_price']>zs['end'] and strokes[-2]['end_price']<=zs['end']:
-        return {'type':'first_buy','price':strokes[-1]['end_price'],'zs':zs}, None
-    # 第一类卖点：离开中枢后一笔向下跌破中枢下沿
-    if strokes[-1]['type']=='down' and strokes[-1]['end_price']<zs['start'] and strokes[-2]['end_price']>=zs['start']:
-        return None, {'type':'first_sell','price':strokes[-1]['end_price'],'zs':zs}
-    # 第二类买点：回踩中枢上沿后再次向上
-    if strokes[-2]['type']=='up' and strokes[-1]['type']=='down' and strokes[-1]['end_price']>zs['end'] and strokes[-1]['start_price']>=zs['end']:
-        return {'type':'second_buy','price':strokes[-1]['end_price'],'zs':zs}, None
-    # 第二类卖点：反抽中枢下沿后再次向下
-    if strokes[-2]['type']=='down' and strokes[-1]['type']=='up' and strokes[-1]['end_price']<zs['start'] and strokes[-1]['start_price']<=zs['start']:
-        return None, {'type':'second_sell','price':strokes[-1]['end_price'],'zs':zs}
-    return None, None
-
-    def find_last_buy_signal(strokes):
-        if len(strokes) < 4 or not (strokes[-1]['type'] == 'down' and strokes[-3]['type'] == 'down'):
-            return None
-        
-        last_down_stroke = strokes[-1]
-        prev_down_stroke = strokes[-3]
-
-        # 简化背驰判断：当前下跌笔的幅度小于前一个下跌笔
-        if (last_down_stroke['start_price'] - last_down_stroke['end_price']) < (prev_down_stroke['start_price'] - prev_down_stroke['end_price']):
-            # 确保价格没有创新低
-            if last_down_stroke['end_price'] > prev_down_stroke['end_price']:
-                 return {'price': last_down_stroke['end_price'], 'stop_loss': prev_down_stroke['end_price']}
-        return None
-
-    def find_last_sell_signal(strokes):
-        if len(strokes) < 4 or not (strokes[-1]['type'] == 'up' and strokes[-3]['type'] == 'up'):
-            return None
-
-        last_up_stroke = strokes[-1]
-        prev_up_stroke = strokes[-3]
-
-        if (last_up_stroke['end_price'] - last_up_stroke['start_price']) < (prev_up_stroke['end_price'] - prev_up_stroke['start_price']):
-            if last_up_stroke['end_price'] < prev_up_stroke['end_price']:
-                return {'price': last_up_stroke['end_price'], 'stop_loss': prev_up_stroke['end_price']}
-        return None
-
-    # --- 3. 生成策略 --- 
-    buy_signal_15m = find_last_buy_signal(strokes_15m)
-    sell_signal_15m = find_last_sell_signal(strokes_15m)
-    buy_signal_1h = find_last_buy_signal(strokes_1h)
-    sell_signal_1h = find_last_sell_signal(strokes_1h)
-
-    # 长期单：1h和15m信号共振
-    if buy_signal_1h and buy_signal_15m:
-        order_price = round(current_price * 1.001, 2)
-        stop_loss = round(buy_signal_1h['stop_loss'] * 0.99, 2)
+    # 获取4小时K线数据
+    klines_4h = get_binance_klines(symbol, interval='4h', limit=200)
+    df_4h = pd.DataFrame(klines_4h, columns=['timestamp','open','high','low','close','volume'])
+    df_4h['close'] = df_4h['close'].astype(float)
+    fractals_4h = find_fractals(df_4h)
+    strokes_4h = find_strokes(fractals_4h)
+    segments_4h = find_segments(strokes_4h)
+    zhongshus_4h = find_zhongshu(segments_4h)
+    buy_signal_4h = find_last_buy_signal(strokes_4h)
+    sell_signal_4h = find_last_sell_signal(strokes_4h)
+    # 长线策略：4H与1H共振
+    if buy_signal_4h and buy_signal_1h:
+        order_price = round(current_price * 1.002, 2)
+        stop_loss = round(buy_signal_4h['stop_loss'] * 0.99, 2)
         risk = order_price - stop_loss
-        take_profit = round(order_price + risk * 3, 2)
-        analysis = f"长期看多信号(1H与15M共振):\n1H级别出现买入结构，止损参考位: {buy_signal_1h['stop_loss']:.2f}。\n15M级别出现买入结构，入场点参考: {buy_signal_15m['price']:.2f}。\n策略: 等待价格回调至入场点附近买入，严格止损。"
-        orders.append(create_order("ETH缠论长线多单", "BUY", current_price, order_price, stop_loss, take_profit, investment_amount, leverage, analysis))
-
-    if sell_signal_1h and sell_signal_15m:
-        order_price = round(current_price * 0.999, 2)
-        stop_loss = round(sell_signal_1h['stop_loss'] * 1.01, 2)
+        take_profit = round(order_price + risk * 4, 2)
+        profit_loss_ratio = (take_profit - order_price) / (order_price - stop_loss) if (order_price - stop_loss) > 0 else 0
+        if profit_loss_ratio > 3:
+            analysis = f"长线看多信号(4H与1H共振):\n4H级别出现买入结构，止损参考位: {buy_signal_4h['stop_loss']:.2f}。\n1H级别出现买入结构，入场点参考: {buy_signal_1h['price']:.2f}。\n策略: 等待价格回调至入场点附近买入，严格止损，盈亏比: {profit_loss_ratio:.2f}:1。"
+            orders.append(create_order("ETH缠论长线多单", "BUY", current_price, order_price, stop_loss, take_profit, investment_amount, leverage, analysis))
+    if sell_signal_4h and sell_signal_1h:
+        order_price = round(current_price * 0.998, 2)
+        stop_loss = round(sell_signal_4h['stop_loss'] * 1.01, 2)
         risk = stop_loss - order_price
-        take_profit = round(order_price - risk * 3, 2)
-        analysis = f"长期看空信号(1H与15M共振):\n1H级别出现卖出结构，止损参考位: {sell_signal_1h['stop_loss']:.2f}。\n15M级别出现卖出结构，入场点参考: {sell_signal_15m['price']:.2f}。\n策略: 等待价格反弹至入场点附近卖出，严格止损。"
-        orders.append(create_order("ETH缠论长线空单", "SELL", current_price, order_price, stop_loss, take_profit, investment_amount, leverage, analysis))
-
-    # 短期单：仅15m信号
-    elif buy_signal_15m:
+        take_profit = round(order_price - risk * 4, 2)
+        profit_loss_ratio = (order_price - take_profit) / (stop_loss - order_price) if (stop_loss - order_price) > 0 else 0
+        if profit_loss_ratio > 3:
+            analysis = f"长线看空信号(4H与1H共振):\n4H级别出现卖出结构，止损参考位: {sell_signal_4h['stop_loss']:.2f}。\n1H级别出现卖出结构，入场点参考: {sell_signal_1h['price']:.2f}。\n策略: 等待价格反弹至入场点附近卖出，严格止损，盈亏比: {profit_loss_ratio:.2f}:1。"
+            orders.append(create_order("ETH缠论长线空单", "SELL", current_price, order_price, stop_loss, take_profit, investment_amount, leverage, analysis))
+    # 短线策略：1H+15M+5M共振
+    if buy_signal_1h and buy_signal_15m and buy_signal_5m:
         order_price = round(current_price * 1.001, 2)
-        stop_loss = round(buy_signal_15m['stop_loss'] * 0.995, 2)
+        stop_loss = round(buy_signal_5m['stop_loss'] * 0.995, 2)
         risk = order_price - stop_loss
-        take_profit = round(order_price + risk * 1.5, 2) # 短期目标放低
-        analysis = f"短期看多信号(15M):\n15M级别出现潜在底背驰买入结构。\n入场点参考: {buy_signal_15m['price']:.2f}，止损参考: {buy_signal_15m['stop_loss']:.2f}。\n策略: 短线操作，快进快出，盈亏比目标1.5:1。"
-        orders.append(create_order("ETH缠论短线多单", "BUY", current_price, order_price, stop_loss, take_profit, investment_amount, leverage, analysis))
-
-    elif sell_signal_15m:
+        take_profit = round(order_price + risk * 3.2, 2)
+        profit_loss_ratio = (take_profit - order_price) / (order_price - stop_loss) if (order_price - stop_loss) > 0 else 0
+        if profit_loss_ratio > 3:
+            analysis = f"短线看多信号(1H+15M+5M共振):\n1H、15M、5M均出现买入结构，入场点: {buy_signal_5m['price']:.2f}，止损: {buy_signal_5m['stop_loss']:.2f}。\n策略: 快进快出，盈亏比: {profit_loss_ratio:.2f}:1。"
+            orders.append(create_order("ETH缠论短线多单", "BUY", current_price, order_price, stop_loss, take_profit, investment_amount, leverage, analysis))
+    if sell_signal_1h and sell_signal_15m and sell_signal_5m:
         order_price = round(current_price * 0.999, 2)
-        stop_loss = round(sell_signal_15m['stop_loss'] * 1.005, 2)
+        stop_loss = round(sell_signal_5m['stop_loss'] * 1.005, 2)
         risk = stop_loss - order_price
-        take_profit = round(order_price - risk * 1.5, 2)
-        analysis = f"短期看空信号(15M):\n15M级别出现潜在顶背驰卖出结构。\n入场点参考: {sell_signal_15m['price']:.2f}，止损参考: {sell_signal_15m['stop_loss']:.2f}。\n策略: 短线操作，快进快出，盈亏比目标1.5:1。"
-        orders.append(create_order("ETH缠论短线空单", "SELL", current_price, order_price, stop_loss, take_profit, investment_amount, leverage, analysis))
+        take_profit = round(order_price - risk * 3.2, 2)
+        profit_loss_ratio = (order_price - take_profit) / (stop_loss - order_price) if (stop_loss - order_price) > 0 else 0
+        if profit_loss_ratio > 3:
+            analysis = f"短线看空信号(1H+15M+5M共振):\n1H、15M、5M均出现卖出结构，入场点: {sell_signal_5m['price']:.2f}，止损: {sell_signal_5m['stop_loss']:.2f}。\n策略: 快进快出，盈亏比: {profit_loss_ratio:.2f}:1。"
+            orders.append(create_order("ETH缠论短线空单", "SELL", current_price, order_price, stop_loss, take_profit, investment_amount, leverage, analysis))
 
     return pd.DataFrame(orders)
 
