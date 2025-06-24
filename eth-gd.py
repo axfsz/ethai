@@ -52,6 +52,29 @@ def calc_ema(data, period):
 
 # --- 缠论核心分析函数 ---
 
+def find_segments(strokes):
+    """从笔构建线段（简化版）"""
+    if not strokes or len(strokes) < 3:
+        return []
+    segments = []
+    i = 0
+    while i < len(strokes) - 2:
+        # 三笔同向，合并为一段
+        if strokes[i]['type'] == strokes[i+1]['type'] == strokes[i+2]['type']:
+            segment_type = strokes[i]['type']
+            segment = {
+                'start_price': strokes[i]['start_price'],
+                'end_price': strokes[i+2]['end_price'],
+                'start_time': strokes[i]['start_time'],
+                'end_time': strokes[i+2]['end_time'],
+                'type': segment_type
+            }
+            segments.append(segment)
+            i += 2
+        else:
+            i += 1
+    return segments
+
 def find_fractals(klines):
     """识别分型"""
     fractals = []
@@ -131,20 +154,56 @@ def create_order(name, direction, trigger, order_price, sl, tp, investment, leve
 def generate_order_table(market_data, investment_amount, leverage):
     current_price = market_data['current_price']
     orders = []
-
-    # --- 1. 多级别缠论结构分析 ---
-    # 15分钟级别，用于寻找短期交易机会
     fractals_15m = find_fractals(market_data['klines_15m'])
     strokes_15m = find_strokes(fractals_15m)
-
-    # 1小时级别，用于确认长期趋势
+    segments_15m = find_segments(strokes_15m)
+    zhongshus_15m = find_zhongshu(segments_15m)
+    buy1_15m, sell1_15m = find_first_second_buy_sell(strokes_15m, zhongshus_15m)
     fractals_1h = find_fractals(market_data['klines_1h'])
     strokes_1h = find_strokes(fractals_1h)
+    segments_1h = find_segments(strokes_1h)
+    zhongshus_1h = find_zhongshu(segments_1h)
+    buy1_1h, sell1_1h = find_first_second_buy_sell(strokes_1h, zhongshus_1h)
+    # 生成中枢买卖点策略
+    if buy1_15m:
+        analysis = f"15M中枢{buy1_15m['type']}信号，突破中枢区间[{buy1_15m['zs']['start']:.2f},{buy1_15m['zs']['end']:.2f}]，入场价{buy1_15m['price']:.2f}"
+        orders.append(create_order("ETH缠论中枢多单", "BUY", current_price, round(buy1_15m['price'],2), round(buy1_15m['zs']['start'],2), round(buy1_15m['price']+abs(buy1_15m['price']-buy1_15m['zs']['start'])*2,2), investment_amount, leverage, analysis))
+    if sell1_15m:
+        analysis = f"15M中枢{sell1_15m['type']}信号，跌破中枢区间[{sell1_15m['zs']['start']:.2f},{sell1_15m['zs']['end']:.2f}]，入场价{sell1_15m['price']:.2f}"
+        orders.append(create_order("ETH缠论中枢空单", "SELL", current_price, round(sell1_15m['price'],2), round(sell1_15m['zs']['end'],2), round(sell1_15m['price']-abs(sell1_15m['price']-sell1_15m['zs']['end'])*2,2), investment_amount, leverage, analysis))
+    # ... existing code ...
+def find_zhongshu(segments):
+    """识别中枢（简化版，三段重叠区间）"""
+    if not segments or len(segments) < 3:
+        return []
+    zhongshus = []
+    for i in range(len(segments)-2):
+        s1, s2, s3 = segments[i], segments[i+1], segments[i+2]
+        # 取三段的重叠区间
+        zs_high = min(s1['end_price'], s2['end_price'], s3['end_price'])
+        zs_low = max(s1['start_price'], s2['start_price'], s3['start_price'])
+        if zs_high > zs_low:
+            zhongshus.append({'start':zs_low, 'end':zs_high, 'index':i+2})
+    return zhongshus
 
-    # --- 2. 寻找交易信号 ---
-    # 缠论的买卖点判断逻辑非常复杂，这里我们先简化实现一个基于“笔”的背驰策略
-    # 即：寻找一个下跌笔的力度比前一个下跌笔弱，认为是买入信号（底背驰）
-    # 反之，寻找一个上涨笔的力度比前一个上涨笔弱，认为是卖出信号（顶背驰）
+def find_first_second_buy_sell(strokes, zhongshus):
+    """识别第一、第二类买卖点（简化版）"""
+    if not zhongshus:
+        return None, None
+    zs = zhongshus[-1]
+    # 第一类买点：离开中枢后一笔向上突破中枢上沿
+    if strokes[-1]['type']=='up' and strokes[-1]['end_price']>zs['end'] and strokes[-2]['end_price']<=zs['end']:
+        return {'type':'first_buy','price':strokes[-1]['end_price'],'zs':zs}, None
+    # 第一类卖点：离开中枢后一笔向下跌破中枢下沿
+    if strokes[-1]['type']=='down' and strokes[-1]['end_price']<zs['start'] and strokes[-2]['end_price']>=zs['start']:
+        return None, {'type':'first_sell','price':strokes[-1]['end_price'],'zs':zs}
+    # 第二类买点：回踩中枢上沿后再次向上
+    if strokes[-2]['type']=='up' and strokes[-1]['type']=='down' and strokes[-1]['end_price']>zs['end'] and strokes[-1]['start_price']>=zs['end']:
+        return {'type':'second_buy','price':strokes[-1]['end_price'],'zs':zs}, None
+    # 第二类卖点：反抽中枢下沿后再次向下
+    if strokes[-2]['type']=='down' and strokes[-1]['type']=='up' and strokes[-1]['end_price']<zs['start'] and strokes[-1]['start_price']<=zs['start']:
+        return None, {'type':'second_sell','price':strokes[-1]['end_price'],'zs':zs}
+    return None, None
 
     def find_last_buy_signal(strokes):
         if len(strokes) < 4 or not (strokes[-1]['type'] == 'down' and strokes[-3]['type'] == 'down'):
