@@ -1,0 +1,741 @@
+2025-06-25 19:09:21,351 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:09:21,352 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:09:21,353 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:09:21,353 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:09:22,740 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9687,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750849763,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 19:09:22,741 - INFO - send_telegram returned: True
+2025-06-25 19:09:22,741 - INFO - 启动通知发送成功
+2025-06-25 19:09:22,745 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.10.54.4:5001
+2025-06-25 19:09:22,745 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-25 19:09:24,051 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+<pre>--------------------------</pre>
+💰 当前价格: $2425.46
+<pre>====================</pre>
+⏰ <b>更新时间:</b> 2025-06-25 19:09 (北京时间)
+2025-06-25 19:09:24,051 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n<pre>--------------------------</pre>\n💰 当前价格: $2425.46\n<pre>====================</pre>\n⏰ <b>更新时间:</b> 2025-06-25 19:09 (北京时间)',), kwargs: {}
+2025-06-25 19:09:25,373 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9688,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750849766,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n--------------------------\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2425.46\n====================\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 19:09 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":12,"length":26,"type":"pre"},{"offset":57,"length":20,"type":"pre"},{"offset":80,"length":5,"type":"bold"}]}}
+2025-06-25 19:09:25,374 - INFO - send_telegram returned: True
+2025-06-25 19:09:25,374 - INFO - 状态更新通知发送成功
+2025-06-25 19:11:25,675 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:11:25,676 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:11:25,676 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:11:25,676 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:11:27,013 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9689,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750849887,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 19:11:27,014 - INFO - send_telegram returned: True
+2025-06-25 19:11:27,014 - INFO - 启动通知发送成功
+2025-06-25 19:11:27,018 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.10.54.4:5001
+2025-06-25 19:11:27,018 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-25 19:11:27,779 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+--------------------------
+💰 当前价格: $2424.24
+====================
+⏰ <b>更新时间:</b> 2025-06-25 19:11 (北京时间)
+2025-06-25 19:11:27,780 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n--------------------------\n💰 当前价格: $2424.24\n====================\n⏰ <b>更新时间:</b> 2025-06-25 19:11 (北京时间)',), kwargs: {}
+2025-06-25 19:11:29,079 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9690,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750849889,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n--------------------------\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2424.24\n====================\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 19:11 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":80,"length":5,"type":"bold"}]}}
+2025-06-25 19:11:29,080 - INFO - send_telegram returned: True
+2025-06-25 19:11:29,080 - INFO - 状态更新通知发送成功
+2025-06-25 19:13:11,093 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:13:11,093 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:13:11,093 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:13:11,095 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:13:12,441 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9691,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750849993,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 19:13:12,442 - INFO - send_telegram returned: True
+2025-06-25 19:13:12,442 - INFO - 启动通知发送成功
+2025-06-25 19:13:12,762 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.10.54.4:5001
+2025-06-25 19:13:12,762 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-25 19:13:12,763 - ERROR - Error in main: module 'signal' has no attribute 'signal'
+Traceback (most recent call last):
+  File "D:\ethai\logging_config.py", line 29, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ethai\strategy_notifier.py", line 215, in main
+    app.run(host="0.0.0.0", port=5001, debug=True)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 615, in run
+    run_simple(t.cast(str, host), port, self, **options)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\werkzeug\serving.py", line 1115, in run_simple
+    run_with_reloader(
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\werkzeug\_reloader.py", line 452, in run_with_reloader
+    signal.signal(signal.SIGTERM, lambda *args: sys.exit(0))
+    ^^^^^^^^^^^^^
+AttributeError: module 'signal' has no attribute 'signal'. Did you mean: 'Signal'?
+2025-06-25 19:14:44,074 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:14:44,076 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:14:44,076 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:14:44,076 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:14:45,444 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9692,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750850086,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 19:14:45,446 - INFO - send_telegram returned: True
+2025-06-25 19:14:45,446 - INFO - 启动通知发送成功
+2025-06-25 19:14:45,461 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.10.54.4:5001
+2025-06-25 19:14:45,461 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-25 19:14:45,461 - INFO -  * Restarting with stat
+2025-06-25 19:14:45,790 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:14:45,791 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:14:45,791 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:14:45,791 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:14:46,385 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+--------------------------
+💰 当前价格: $2418.94
+====================
+⏰ <b>更新时间:</b> 2025-06-25 19:14 (北京时间)
+2025-06-25 19:14:46,385 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n--------------------------\n💰 当前价格: $2418.94\n====================\n⏰ <b>更新时间:</b> 2025-06-25 19:14 (北京时间)',), kwargs: {}
+2025-06-25 19:14:47,127 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9693,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750850088,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 19:14:47,127 - INFO - send_telegram returned: True
+2025-06-25 19:14:47,128 - INFO - 启动通知发送成功
+2025-06-25 19:14:47,137 - WARNING -  * Debugger is active!
+2025-06-25 19:14:47,138 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 19:14:47,706 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9694,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750850088,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n--------------------------\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2418.94\n====================\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 19:14 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":80,"length":5,"type":"bold"}]}}
+2025-06-25 19:14:47,707 - INFO - send_telegram returned: True
+2025-06-25 19:14:47,707 - INFO - 状态更新通知发送成功
+2025-06-25 19:14:47,961 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+--------------------------
+💰 当前价格: $2418.85
+====================
+⏰ <b>更新时间:</b> 2025-06-25 19:14 (北京时间)
+2025-06-25 19:14:47,961 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n--------------------------\n💰 当前价格: $2418.85\n====================\n⏰ <b>更新时间:</b> 2025-06-25 19:14 (北京时间)',), kwargs: {}
+2025-06-25 19:14:49,263 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9695,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750850090,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n--------------------------\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2418.85\n====================\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 19:14 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":80,"length":5,"type":"bold"}]}}
+2025-06-25 19:14:49,265 - INFO - send_telegram returned: True
+2025-06-25 19:14:49,265 - INFO - 状态更新通知发送成功
+2025-06-25 19:20:45,806 - INFO -  * Detected change in 'D:\\ethai\\strategy_notifier.py', reloading
+2025-06-25 19:20:46,005 - INFO -  * Restarting with stat
+2025-06-25 19:20:46,313 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:20:46,314 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:20:46,314 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:20:46,314 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:20:56,323 - ERROR - Telegram 请求异常 | 聊天ID: 6835958824 | 错误: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot7378390777:AAEPODs9r_J1Y488nUJx-79XcdUiLcAzaos/sendMessage (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x000002C973EB8EC0>, 'Connection to api.telegram.org timed out. (connect timeout=10)'))
+2025-06-25 19:20:56,323 - INFO - send_telegram returned: False
+2025-06-25 19:20:56,323 - ERROR - 启动通知发送失败
+2025-06-25 19:20:56,332 - WARNING -  * Debugger is active!
+2025-06-25 19:20:56,333 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 19:20:56,537 - ERROR - Error in generate_status_message: binance GET https://api.binance.com/api/v3/exchangeInfo
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connection.py", line 704, in connect
+    self.sock = sock = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connection.py", line 207, in _new_conn
+    raise ConnectTimeoutError(
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x000002C973EB8B90>, 'Connection to api.binance.com timed out. (connect timeout=10)')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x000002C973EB8B90>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\base\exchange.py", line 584, in fetch
+    response = self.session.request(
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\adapters.py", line 507, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x000002C973EB8B90>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\ethai\logging_config.py", line 29, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ethai\strategy_notifier.py", line 173, in generate_status_message
+    ticker = exchange.fetch_ticker('ETH/USDT')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\binance.py", line 2949, in fetch_ticker
+    self.load_markets()
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\base\exchange.py", line 1444, in load_markets
+    markets = self.fetch_markets(params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\binance.py", line 1995, in fetch_markets
+    promisesRaw.append(self.publicGetExchangeInfo(params))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\base\types.py", line 26, in unbound_method
+    return _self.request(self.path, self.api, self.method, params, config=self.config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\binance.py", line 7628, in request
+    response = self.fetch2(path, api, method, params, headers, body, config)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\base\exchange.py", line 3044, in fetch2
+    return self.fetch(request['url'], request['method'], request['headers'], request['body'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\base\exchange.py", line 614, in fetch
+    raise RequestTimeout(details) from e
+ccxt.base.errors.RequestTimeout: binance GET https://api.binance.com/api/v3/exchangeInfo
+2025-06-25 19:20:56,543 - ERROR - 状态更新失败: binance GET https://api.binance.com/api/v3/exchangeInfo
+2025-06-25 19:21:00,123 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:21:00,124 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:21:00,124 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:21:00,124 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:21:10,140 - ERROR - Error in generate_status_message: binance GET https://api.binance.com/api/v3/exchangeInfo
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connection.py", line 704, in connect
+    self.sock = sock = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connection.py", line 207, in _new_conn
+    raise ConnectTimeoutError(
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x00000233B1108B60>, 'Connection to api.binance.com timed out. (connect timeout=10)')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x00000233B1108B60>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\base\exchange.py", line 584, in fetch
+    response = self.session.request(
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\adapters.py", line 507, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x00000233B1108B60>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\ethai\logging_config.py", line 29, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ethai\strategy_notifier.py", line 173, in generate_status_message
+    ticker = exchange.fetch_ticker('ETH/USDT')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\binance.py", line 2949, in fetch_ticker
+    self.load_markets()
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\base\exchange.py", line 1444, in load_markets
+    markets = self.fetch_markets(params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\binance.py", line 1995, in fetch_markets
+    promisesRaw.append(self.publicGetExchangeInfo(params))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\base\types.py", line 26, in unbound_method
+    return _self.request(self.path, self.api, self.method, params, config=self.config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\binance.py", line 7628, in request
+    response = self.fetch2(path, api, method, params, headers, body, config)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\base\exchange.py", line 3044, in fetch2
+    return self.fetch(request['url'], request['method'], request['headers'], request['body'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\base\exchange.py", line 614, in fetch
+    raise RequestTimeout(details) from e
+ccxt.base.errors.RequestTimeout: binance GET https://api.binance.com/api/v3/exchangeInfo
+2025-06-25 19:21:10,140 - ERROR - Telegram 请求异常 | 聊天ID: 6835958824 | 错误: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot7378390777:AAEPODs9r_J1Y488nUJx-79XcdUiLcAzaos/sendMessage (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x00000233B1108E30>, 'Connection to api.telegram.org timed out. (connect timeout=10)'))
+2025-06-25 19:21:10,144 - ERROR - 状态更新失败: binance GET https://api.binance.com/api/v3/exchangeInfo
+2025-06-25 19:21:10,144 - INFO - send_telegram returned: False
+2025-06-25 19:21:10,144 - ERROR - 启动通知发送失败
+2025-06-25 19:21:10,158 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.10.54.4:5001
+2025-06-25 19:21:10,158 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-25 19:21:10,159 - INFO -  * Restarting with stat
+2025-06-25 19:21:10,500 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:21:10,501 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:21:10,501 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:21:10,501 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:21:20,520 - ERROR - Error in generate_status_message: binance GET https://api.binance.com/api/v3/exchangeInfo
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+TimeoutError: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connection.py", line 704, in connect
+    self.sock = sock = self._new_conn()
+                       ^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connection.py", line 207, in _new_conn
+    raise ConnectTimeoutError(
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x00000278E1EF8BC0>, 'Connection to api.binance.com timed out. (connect timeout=10)')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x00000278E1EF8BC0>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\base\exchange.py", line 584, in fetch
+    response = self.session.request(
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\adapters.py", line 507, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/exchangeInfo (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x00000278E1EF8BC0>, 'Connection to api.binance.com timed out. (connect timeout=10)'))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\ethai\logging_config.py", line 29, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ethai\strategy_notifier.py", line 173, in generate_status_message
+    ticker = exchange.fetch_ticker('ETH/USDT')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\binance.py", line 2949, in fetch_ticker
+    self.load_markets()
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\base\exchange.py", line 1444, in load_markets
+    markets = self.fetch_markets(params)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\binance.py", line 1995, in fetch_markets
+    promisesRaw.append(self.publicGetExchangeInfo(params))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\base\types.py", line 26, in unbound_method
+    return _self.request(self.path, self.api, self.method, params, config=self.config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\binance.py", line 7628, in request
+    response = self.fetch2(path, api, method, params, headers, body, config)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\base\exchange.py", line 3044, in fetch2
+    return self.fetch(request['url'], request['method'], request['headers'], request['body'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\ccxt\base\exchange.py", line 614, in fetch
+    raise RequestTimeout(details) from e
+ccxt.base.errors.RequestTimeout: binance GET https://api.binance.com/api/v3/exchangeInfo
+2025-06-25 19:21:20,522 - ERROR - Telegram 请求异常 | 聊天ID: 6835958824 | 错误: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot7378390777:AAEPODs9r_J1Y488nUJx-79XcdUiLcAzaos/sendMessage (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x00000278E1EF8EF0>, 'Connection to api.telegram.org timed out. (connect timeout=10)'))
+2025-06-25 19:21:20,531 - ERROR - 状态更新失败: binance GET https://api.binance.com/api/v3/exchangeInfo
+2025-06-25 19:21:20,531 - INFO - send_telegram returned: False
+2025-06-25 19:21:20,531 - ERROR - 启动通知发送失败
+2025-06-25 19:21:20,540 - WARNING -  * Debugger is active!
+2025-06-25 19:21:20,541 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 19:27:16,532 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:27:16,532 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:27:16,532 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:27:16,532 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:27:17,864 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9700,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750850838,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 19:27:17,865 - INFO - send_telegram returned: True
+2025-06-25 19:27:17,866 - INFO - 启动通知发送成功
+2025-06-25 19:27:17,900 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://10.10.54.4:5001
+2025-06-25 19:27:17,901 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-25 19:27:17,902 - INFO -  * Restarting with stat
+2025-06-25 19:27:18,233 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:27:18,233 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:27:18,233 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:27:18,233 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:27:18,836 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+· · · · · · · · · · · · · · · · ·
+💰 当前价格: $2420.79
+· · · · · · · · · · · · · · · · ·
+⏰ <b>更新时间:</b> 2025-06-25 19:27 (北京时间)
+2025-06-25 19:27:18,836 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n· · · · · · · · · · · · · · · · ·\n💰 当前价格: $2420.79\n· · · · · · · · · · · · · · · · ·\n⏰ <b>更新时间:</b> 2025-06-25 19:27 (北京时间)',), kwargs: {}
+2025-06-25 19:27:19,511 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9701,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750850840,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 19:27:19,512 - INFO - send_telegram returned: True
+2025-06-25 19:27:19,513 - INFO - 启动通知发送成功
+2025-06-25 19:27:19,523 - WARNING -  * Debugger is active!
+2025-06-25 19:27:19,524 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 19:27:20,192 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9702,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750850841,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2420.79\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 19:27 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":100,"length":5,"type":"bold"}]}}
+2025-06-25 19:27:20,193 - INFO - send_telegram returned: True
+2025-06-25 19:27:20,193 - INFO - 状态更新通知发送成功
+2025-06-25 19:27:20,481 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+· · · · · · · · · · · · · · · · ·
+💰 当前价格: $2420.81
+· · · · · · · · · · · · · · · · ·
+⏰ <b>更新时间:</b> 2025-06-25 19:27 (北京时间)
+2025-06-25 19:27:20,482 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n· · · · · · · · · · · · · · · · ·\n💰 当前价格: $2420.81\n· · · · · · · · · · · · · · · · ·\n⏰ <b>更新时间:</b> 2025-06-25 19:27 (北京时间)',), kwargs: {}
+2025-06-25 19:27:21,771 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9703,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750850842,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2420.81\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 19:27 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":100,"length":5,"type":"bold"}]}}
+2025-06-25 19:27:21,772 - INFO - send_telegram returned: True
+2025-06-25 19:27:21,773 - INFO - 状态更新通知发送成功
+2025-06-25 19:30:52,189 - INFO -  * Detected change in 'D:\\ethai\\strategy_notifier.py', reloading
+2025-06-25 19:30:52,192 - INFO -  * Detected change in 'D:\\ethai\\strategy_notifier.py', reloading
+2025-06-25 19:30:52,311 - INFO -  * Restarting with stat
+2025-06-25 19:30:52,494 - INFO -  * Detected change in 'D:\\ethai\\strategy_notifier.py', reloading
+2025-06-25 19:30:52,715 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:30:52,716 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:30:52,717 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:30:52,717 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:30:52,734 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:30:52,737 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:30:52,737 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:30:52,737 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:30:52,786 - INFO -  * Restarting with stat
+2025-06-25 19:30:53,170 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:30:53,171 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:30:53,171 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:30:53,171 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:30:54,134 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9704,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851055,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 19:30:54,135 - INFO - send_telegram returned: True
+2025-06-25 19:30:54,135 - INFO - 启动通知发送成功
+2025-06-25 19:30:54,144 - WARNING -  * Debugger is active!
+2025-06-25 19:30:54,145 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 19:30:54,173 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9705,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851055,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 19:30:54,174 - INFO - send_telegram returned: True
+2025-06-25 19:30:54,174 - INFO - 启动通知发送成功
+2025-06-25 19:30:54,183 - WARNING -  * Debugger is active!
+2025-06-25 19:30:54,184 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 19:30:54,520 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9706,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851055,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 19:30:54,521 - INFO - send_telegram returned: True
+2025-06-25 19:30:54,521 - INFO - 启动通知发送成功
+2025-06-25 19:30:54,530 - WARNING -  * Debugger is active!
+2025-06-25 19:30:54,531 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 19:30:55,397 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+· · · · · · · · · · · · · · · · ·
+💰 当前价格: $2420.84
+· · · · · · · · · · · · · · · · ·
+⏰ <b>更新时间:</b> 2025-06-25 19:30 (北京时间)
+2025-06-25 19:30:55,397 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n· · · · · · · · · · · · · · · · ·\n💰 当前价格: $2420.84\n· · · · · · · · · · · · · · · · ·\n⏰ <b>更新时间:</b> 2025-06-25 19:30 (北京时间)',), kwargs: {}
+2025-06-25 19:30:55,540 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+· · · · · · · · · · · · · · · · ·
+💰 当前价格: $2420.84
+· · · · · · · · · · · · · · · · ·
+⏰ <b>更新时间:</b> 2025-06-25 19:30 (北京时间)
+2025-06-25 19:30:55,540 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n· · · · · · · · · · · · · · · · ·\n💰 当前价格: $2420.84\n· · · · · · · · · · · · · · · · ·\n⏰ <b>更新时间:</b> 2025-06-25 19:30 (北京时间)',), kwargs: {}
+2025-06-25 19:30:55,543 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+· · · · · · · · · · · · · · · · ·
+💰 当前价格: $2420.84
+· · · · · · · · · · · · · · · · ·
+⏰ <b>更新时间:</b> 2025-06-25 19:30 (北京时间)
+2025-06-25 19:30:55,543 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n· · · · · · · · · · · · · · · · ·\n💰 当前价格: $2420.84\n· · · · · · · · · · · · · · · · ·\n⏰ <b>更新时间:</b> 2025-06-25 19:30 (北京时间)',), kwargs: {}
+2025-06-25 19:30:57,107 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9707,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851058,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2420.84\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 19:30 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":100,"length":5,"type":"bold"}]}}
+2025-06-25 19:30:57,109 - INFO - send_telegram returned: True
+2025-06-25 19:30:57,109 - INFO - 状态更新通知发送成功
+2025-06-25 19:30:57,200 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9708,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851058,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2420.84\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 19:30 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":100,"length":5,"type":"bold"}]}}
+2025-06-25 19:30:57,202 - INFO - send_telegram returned: True
+2025-06-25 19:30:57,203 - INFO - 状态更新通知发送成功
+2025-06-25 19:30:57,245 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9709,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851058,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2420.84\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 19:30 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":100,"length":5,"type":"bold"}]}}
+2025-06-25 19:30:57,247 - INFO - send_telegram returned: True
+2025-06-25 19:30:57,247 - INFO - 状态更新通知发送成功
+2025-06-25 19:32:17,796 - INFO -  * Detected change in 'D:\\ethai\\simple_data_processor.py', reloading
+2025-06-25 19:32:17,811 - INFO -  * Detected change in 'D:\\ethai\\simple_data_processor.py', reloading
+2025-06-25 19:32:17,857 - INFO -  * Detected change in 'D:\\ethai\\simple_data_processor.py', reloading
+2025-06-25 19:32:18,198 - INFO -  * Restarting with stat
+2025-06-25 19:32:18,198 - INFO -  * Restarting with stat
+2025-06-25 19:32:18,248 - INFO -  * Restarting with stat
+2025-06-25 19:32:18,610 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:32:18,611 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:32:18,611 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:32:18,611 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:32:18,612 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:32:18,613 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:32:18,613 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:32:18,613 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:32:18,636 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:32:18,636 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:32:18,636 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:32:18,636 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:32:20,192 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9710,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851141,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 19:32:20,196 - INFO - send_telegram returned: True
+2025-06-25 19:32:20,196 - INFO - 启动通知发送成功
+2025-06-25 19:32:20,207 - WARNING -  * Debugger is active!
+2025-06-25 19:32:20,209 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 19:32:20,221 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9711,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851141,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 19:32:20,222 - INFO - send_telegram returned: True
+2025-06-25 19:32:20,222 - INFO - 启动通知发送成功
+2025-06-25 19:32:20,231 - WARNING -  * Debugger is active!
+2025-06-25 19:32:20,232 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 19:32:20,238 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9712,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851141,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 19:32:20,240 - INFO - send_telegram returned: True
+2025-06-25 19:32:20,240 - INFO - 启动通知发送成功
+2025-06-25 19:32:20,249 - WARNING -  * Debugger is active!
+2025-06-25 19:32:20,251 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 19:32:21,188 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+· · · · · · · · · · · · · · · · ·
+💰 当前价格: $2421.50
+· · · · · · · · · · · · · · · · ·
+⏰ <b>更新时间:</b> 2025-06-25 19:32 (北京时间)
+2025-06-25 19:32:21,188 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n· · · · · · · · · · · · · · · · ·\n💰 当前价格: $2421.50\n· · · · · · · · · · · · · · · · ·\n⏰ <b>更新时间:</b> 2025-06-25 19:32 (北京时间)',), kwargs: {}
+2025-06-25 19:32:21,238 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+· · · · · · · · · · · · · · · · ·
+💰 当前价格: $2421.50
+· · · · · · · · · · · · · · · · ·
+⏰ <b>更新时间:</b> 2025-06-25 19:32 (北京时间)
+2025-06-25 19:32:21,238 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n· · · · · · · · · · · · · · · · ·\n💰 当前价格: $2421.50\n· · · · · · · · · · · · · · · · ·\n⏰ <b>更新时间:</b> 2025-06-25 19:32 (北京时间)',), kwargs: {}
+2025-06-25 19:32:21,253 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+· · · · · · · · · · · · · · · · ·
+💰 当前价格: $2421.50
+· · · · · · · · · · · · · · · · ·
+⏰ <b>更新时间:</b> 2025-06-25 19:32 (北京时间)
+2025-06-25 19:32:21,253 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n· · · · · · · · · · · · · · · · ·\n💰 当前价格: $2421.50\n· · · · · · · · · · · · · · · · ·\n⏰ <b>更新时间:</b> 2025-06-25 19:32 (北京时间)',), kwargs: {}
+2025-06-25 19:32:22,600 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9713,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851143,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2421.50\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 19:32 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":100,"length":5,"type":"bold"}]}}
+2025-06-25 19:32:22,603 - INFO - send_telegram returned: True
+2025-06-25 19:32:22,603 - INFO - 状态更新通知发送成功
+2025-06-25 19:32:22,644 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9714,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851143,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2421.50\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 19:32 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":100,"length":5,"type":"bold"}]}}
+2025-06-25 19:32:22,646 - INFO - send_telegram returned: True
+2025-06-25 19:32:22,646 - INFO - 状态更新通知发送成功
+2025-06-25 19:32:22,688 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9715,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851143,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2421.50\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 19:32 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":100,"length":5,"type":"bold"}]}}
+2025-06-25 19:32:22,688 - INFO - send_telegram returned: True
+2025-06-25 19:32:22,688 - INFO - 状态更新通知发送成功
+2025-06-25 19:33:02,409 - INFO -  * Detected change in 'D:\\ethai\\signal_detector.py', reloading
+2025-06-25 19:33:02,419 - INFO -  * Detected change in 'D:\\ethai\\signal_detector.py', reloading
+2025-06-25 19:33:02,421 - INFO -  * Detected change in 'D:\\ethai\\signal_detector.py', reloading
+2025-06-25 19:33:02,815 - INFO -  * Restarting with stat
+2025-06-25 19:33:02,818 - INFO -  * Restarting with stat
+2025-06-25 19:33:02,820 - INFO -  * Restarting with stat
+2025-06-25 19:33:03,265 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:33:03,265 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:33:03,267 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:33:03,267 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:33:03,267 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:33:03,267 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:33:03,267 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:33:03,267 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:33:03,278 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 19:33:03,279 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 19:33:03,279 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 19:33:03,279 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 19:33:04,715 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9716,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851185,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 19:33:04,716 - INFO - send_telegram returned: True
+2025-06-25 19:33:04,716 - INFO - 启动通知发送成功
+2025-06-25 19:33:04,725 - WARNING -  * Debugger is active!
+2025-06-25 19:33:04,726 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 19:33:04,750 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9717,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851185,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 19:33:04,752 - INFO - send_telegram returned: True
+2025-06-25 19:33:04,753 - INFO - 启动通知发送成功
+2025-06-25 19:33:04,762 - WARNING -  * Debugger is active!
+2025-06-25 19:33:04,764 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 19:33:04,770 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9718,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851185,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 19:33:04,772 - INFO - send_telegram returned: True
+2025-06-25 19:33:04,772 - INFO - 启动通知发送成功
+2025-06-25 19:33:04,782 - WARNING -  * Debugger is active!
+2025-06-25 19:33:04,785 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 19:33:05,825 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+· · · · · · · · · · · · · · · · ·
+💰 当前价格: $2422.76
+· · · · · · · · · · · · · · · · ·
+⏰ <b>更新时间:</b> 2025-06-25 19:33 (北京时间)
+2025-06-25 19:33:05,825 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n· · · · · · · · · · · · · · · · ·\n💰 当前价格: $2422.76\n· · · · · · · · · · · · · · · · ·\n⏰ <b>更新时间:</b> 2025-06-25 19:33 (北京时间)',), kwargs: {}
+2025-06-25 19:33:05,959 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+· · · · · · · · · · · · · · · · ·
+💰 当前价格: $2422.75
+· · · · · · · · · · · · · · · · ·
+⏰ <b>更新时间:</b> 2025-06-25 19:33 (北京时间)
+2025-06-25 19:33:05,966 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n· · · · · · · · · · · · · · · · ·\n💰 当前价格: $2422.75\n· · · · · · · · · · · · · · · · ·\n⏰ <b>更新时间:</b> 2025-06-25 19:33 (北京时间)',), kwargs: {}
+2025-06-25 19:33:06,004 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+· · · · · · · · · · · · · · · · ·
+💰 当前价格: $2422.75
+· · · · · · · · · · · · · · · · ·
+⏰ <b>更新时间:</b> 2025-06-25 19:33 (北京时间)
+2025-06-25 19:33:06,004 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n· · · · · · · · · · · · · · · · ·\n💰 当前价格: $2422.75\n· · · · · · · · · · · · · · · · ·\n⏰ <b>更新时间:</b> 2025-06-25 19:33 (北京时间)',), kwargs: {}
+2025-06-25 19:33:07,161 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9719,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851188,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2422.76\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 19:33 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":100,"length":5,"type":"bold"}]}}
+2025-06-25 19:33:07,162 - INFO - send_telegram returned: True
+2025-06-25 19:33:07,162 - INFO - 状态更新通知发送成功
+2025-06-25 19:33:07,363 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9720,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851188,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2422.75\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 19:33 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":100,"length":5,"type":"bold"}]}}
+2025-06-25 19:33:07,364 - INFO - send_telegram returned: True
+2025-06-25 19:33:07,365 - INFO - 状态更新通知发送成功
+2025-06-25 19:33:07,391 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9721,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750851188,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2422.75\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 19:33 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":100,"length":5,"type":"bold"}]}}
+2025-06-25 19:33:07,392 - INFO - send_telegram returned: True
+2025-06-25 19:33:07,392 - INFO - 状态更新通知发送成功
+2025-06-25 20:09:25,375 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 20:09:26,120 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+<pre>--------------------------</pre>
+💰 当前价格: $2425.85
+<pre>====================</pre>
+⏰ <b>更新时间:</b> 2025-06-25 20:09 (北京时间)
+2025-06-25 20:09:26,120 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n<pre>--------------------------</pre>\n💰 当前价格: $2425.85\n<pre>====================</pre>\n⏰ <b>更新时间:</b> 2025-06-25 20:09 (北京时间)',), kwargs: {}
+2025-06-25 20:09:27,675 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9725,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750853368,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n--------------------------\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2425.85\n====================\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 20:09 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":12,"length":26,"type":"pre"},{"offset":57,"length":20,"type":"pre"},{"offset":80,"length":5,"type":"bold"}]}}
+2025-06-25 20:09:27,676 - INFO - send_telegram returned: True
+2025-06-25 20:09:27,676 - INFO - 状态更新通知发送成功
+2025-06-25 20:11:29,080 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 20:11:29,755 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+--------------------------
+💰 当前价格: $2423.39
+====================
+⏰ <b>更新时间:</b> 2025-06-25 20:11 (北京时间)
+2025-06-25 20:11:29,755 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n--------------------------\n💰 当前价格: $2423.39\n====================\n⏰ <b>更新时间:</b> 2025-06-25 20:11 (北京时间)',), kwargs: {}
+2025-06-25 20:11:31,266 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9726,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750853492,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n--------------------------\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2423.39\n====================\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 20:11 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":80,"length":5,"type":"bold"}]}}
+2025-06-25 20:11:31,268 - INFO - send_telegram returned: True
+2025-06-25 20:11:31,268 - INFO - 状态更新通知发送成功
+2025-06-25 20:14:47,709 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 20:14:48,485 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+--------------------------
+💰 当前价格: $2422.31
+====================
+⏰ <b>更新时间:</b> 2025-06-25 20:14 (北京时间)
+2025-06-25 20:14:48,485 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n--------------------------\n💰 当前价格: $2422.31\n====================\n⏰ <b>更新时间:</b> 2025-06-25 20:14 (北京时间)',), kwargs: {}
+2025-06-25 20:14:50,026 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9727,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750853691,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n--------------------------\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2422.31\n====================\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 20:14 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":80,"length":5,"type":"bold"}]}}
+2025-06-25 20:14:50,028 - INFO - send_telegram returned: True
+2025-06-25 20:14:50,028 - INFO - 状态更新通知发送成功
+2025-06-25 20:21:10,145 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 20:21:13,544 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+· · · · · · · · · · · · · · · · ·
+💰 当前价格: $2421.03
+· · · · · · · · · · · · · · · · ·
+⏰ <b>更新时间:</b> 2025-06-25 20:21 (北京时间)
+2025-06-25 20:21:13,545 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n· · · · · · · · · · · · · · · · ·\n💰 当前价格: $2421.03\n· · · · · · · · · · · · · · · · ·\n⏰ <b>更新时间:</b> 2025-06-25 20:21 (北京时间)',), kwargs: {}
+2025-06-25 20:21:15,083 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9728,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750854076,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2421.03\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 20:21 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":100,"length":5,"type":"bold"}]}}
+2025-06-25 20:21:15,086 - INFO - send_telegram returned: True
+2025-06-25 20:21:15,086 - INFO - 状态更新通知发送成功
+2025-06-25 20:23:40,849 - INFO -  * Detected change in 'D:\\ethai\\strategy_notifier.py', reloading
+2025-06-25 20:23:40,849 - INFO -  * Detected change in 'D:\\ethai\\strategy_notifier.py', reloading
+2025-06-25 20:23:40,849 - INFO -  * Detected change in 'D:\\ethai\\strategy_notifier.py', reloading
+2025-06-25 20:23:41,234 - INFO -  * Restarting with stat
+2025-06-25 20:23:41,240 - INFO -  * Restarting with stat
+2025-06-25 20:23:41,241 - INFO -  * Restarting with stat
+2025-06-25 20:23:41,673 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 20:23:41,674 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 20:23:41,674 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 20:23:41,674 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 20:23:41,676 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 20:23:41,677 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 20:23:41,677 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 20:23:41,677 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 20:23:41,689 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 20:23:41,689 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 20:23:41,689 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 20:23:41,691 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 20:23:43,267 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9729,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750854224,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 20:23:43,268 - INFO - send_telegram returned: True
+2025-06-25 20:23:43,269 - INFO - 启动通知发送成功
+2025-06-25 20:23:43,280 - WARNING -  * Debugger is active!
+2025-06-25 20:23:43,282 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 20:23:43,297 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9730,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750854224,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 20:23:43,298 - INFO - send_telegram returned: True
+2025-06-25 20:23:43,298 - INFO - 启动通知发送成功
+2025-06-25 20:23:43,308 - WARNING -  * Debugger is active!
+2025-06-25 20:23:43,310 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 20:23:43,334 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9731,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750854224,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 20:23:43,335 - INFO - send_telegram returned: True
+2025-06-25 20:23:43,335 - INFO - 启动通知发送成功
+2025-06-25 20:23:43,345 - WARNING -  * Debugger is active!
+2025-06-25 20:23:43,346 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 20:23:44,207 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+....................................
+💰 当前价格: $2422.35
+....................................
+⏰ <b>更新时间:</b> 2025-06-25 20:23 (北京时间)
+2025-06-25 20:23:44,207 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n....................................\n💰 当前价格: $2422.35\n....................................\n⏰ <b>更新时间:</b> 2025-06-25 20:23 (北京时间)',), kwargs: {}
+2025-06-25 20:23:44,405 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+....................................
+💰 当前价格: $2422.35
+....................................
+⏰ <b>更新时间:</b> 2025-06-25 20:23 (北京时间)
+2025-06-25 20:23:44,406 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n....................................\n💰 当前价格: $2422.35\n....................................\n⏰ <b>更新时间:</b> 2025-06-25 20:23 (北京时间)',), kwargs: {}
+2025-06-25 20:23:44,408 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+....................................
+💰 当前价格: $2422.35
+....................................
+⏰ <b>更新时间:</b> 2025-06-25 20:23 (北京时间)
+2025-06-25 20:23:44,408 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n....................................\n💰 当前价格: $2422.35\n....................................\n⏰ <b>更新时间:</b> 2025-06-25 20:23 (北京时间)',), kwargs: {}
+2025-06-25 20:23:45,516 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9732,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750854226,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n....................................\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2422.35\n....................................\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 20:23 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":106,"length":5,"type":"bold"}]}}
+2025-06-25 20:23:45,518 - INFO - send_telegram returned: True
+2025-06-25 20:23:45,518 - INFO - 状态更新通知发送成功
+2025-06-25 20:23:45,766 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9733,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750854226,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n....................................\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2422.35\n....................................\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 20:23 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":106,"length":5,"type":"bold"}]}}
+2025-06-25 20:23:45,767 - INFO - send_telegram returned: True
+2025-06-25 20:23:45,767 - INFO - 状态更新通知发送成功
+2025-06-25 20:23:45,800 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9734,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750854226,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n....................................\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2422.35\n....................................\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 20:23 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":106,"length":5,"type":"bold"}]}}
+2025-06-25 20:23:45,800 - INFO - send_telegram returned: True
+2025-06-25 20:23:45,800 - INFO - 状态更新通知发送成功
+2025-06-25 20:27:20,194 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 20:27:20,893 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+· · · · · · · · · · · · · · · · ·
+💰 当前价格: $2420.84
+· · · · · · · · · · · · · · · · ·
+⏰ <b>更新时间:</b> 2025-06-25 20:27 (北京时间)
+2025-06-25 20:27:20,894 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n· · · · · · · · · · · · · · · · ·\n💰 当前价格: $2420.84\n· · · · · · · · · · · · · · · · ·\n⏰ <b>更新时间:</b> 2025-06-25 20:27 (北京时间)',), kwargs: {}
+2025-06-25 20:27:22,414 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9735,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750854443,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2420.84\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 20:27 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":100,"length":5,"type":"bold"}]}}
+2025-06-25 20:27:22,415 - INFO - send_telegram returned: True
+2025-06-25 20:27:22,415 - INFO - 状态更新通知发送成功
