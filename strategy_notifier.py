@@ -1,6 +1,7 @@
 import ccxt
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from flask import Flask, request
 from simple_data_processor import SimpleDataProcessor
 from signal_detector import SignalDetector
@@ -145,7 +146,7 @@ def detect_signals():
 @log_function_call
 def generate_strategy_message(signals):
     """生成策略消息"""
-    now = (datetime.utcnow() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M (北京时间)")
+    now = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M (北京时间)")
     bullish_signals = [s.name for s in signals if 'Bullish' in s.name or 'Breakout' in s.name]
     bearish_signals = [s.name for s in signals if 'Bearish' in s.name]
 
@@ -168,7 +169,7 @@ def generate_strategy_message(signals):
 @log_function_call
 def generate_status_message():
     """生成状态更新消息"""
-    now = (datetime.utcnow() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M (北京时间)")
+    now = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M (北京时间)")
     
     # 获取最新价格
     ticker = exchange.fetch_ticker('ETH/USDT')

@@ -739,3 +739,125 @@ ccxt.base.errors.RequestTimeout: binance GET https://api.binance.com/api/v3/exch
 2025-06-25 20:27:22,414 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9735,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750854443,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2420.84\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 20:27 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":100,"length":5,"type":"bold"}]}}
 2025-06-25 20:27:22,415 - INFO - send_telegram returned: True
 2025-06-25 20:27:22,415 - INFO - 状态更新通知发送成功
+2025-06-25 20:51:09,965 - INFO -  * Detected change in 'D:\\ethai\\strategy_notifier.py', reloading
+2025-06-25 20:51:09,965 - INFO -  * Detected change in 'D:\\ethai\\strategy_notifier.py', reloading
+2025-06-25 20:51:09,966 - INFO -  * Detected change in 'D:\\ethai\\strategy_notifier.py', reloading
+2025-06-25 20:51:10,392 - INFO -  * Restarting with stat
+2025-06-25 20:51:10,393 - INFO -  * Restarting with stat
+2025-06-25 20:51:10,393 - INFO -  * Restarting with stat
+2025-06-25 20:51:10,916 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 20:51:10,917 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 20:51:10,918 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 20:51:10,918 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 20:51:10,918 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 20:51:10,918 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 20:51:10,918 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 20:51:10,919 - ERROR - Error in generate_status_message: name 'timedelta' is not defined
+Traceback (most recent call last):
+  File "D:\ethai\logging_config.py", line 29, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ethai\strategy_notifier.py", line 172, in generate_status_message
+    now = (datetime.utcnow() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M (北京时间)")
+                               ^^^^^^^^^
+NameError: name 'timedelta' is not defined
+2025-06-25 20:51:10,921 - ERROR - 状态更新失败: name 'timedelta' is not defined
+2025-06-25 20:51:10,919 - ERROR - Error in generate_status_message: name 'timedelta' is not defined
+Traceback (most recent call last):
+  File "D:\ethai\logging_config.py", line 29, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ethai\strategy_notifier.py", line 172, in generate_status_message
+    now = (datetime.utcnow() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M (北京时间)")
+                               ^^^^^^^^^
+NameError: name 'timedelta' is not defined
+2025-06-25 20:51:10,921 - ERROR - 状态更新失败: name 'timedelta' is not defined
+2025-06-25 20:51:10,921 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 20:51:10,922 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 20:51:10,922 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 20:51:10,922 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 20:51:10,923 - ERROR - Error in generate_status_message: name 'timedelta' is not defined
+Traceback (most recent call last):
+  File "D:\ethai\logging_config.py", line 29, in wrapper
+    result = func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ethai\strategy_notifier.py", line 172, in generate_status_message
+    now = (datetime.utcnow() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M (北京时间)")
+                               ^^^^^^^^^
+NameError: name 'timedelta' is not defined
+2025-06-25 20:51:10,925 - ERROR - 状态更新失败: name 'timedelta' is not defined
+2025-06-25 20:51:12,341 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9742,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750855873,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 20:51:12,342 - INFO - send_telegram returned: True
+2025-06-25 20:51:12,342 - INFO - 启动通知发送成功
+2025-06-25 20:51:12,351 - WARNING -  * Debugger is active!
+2025-06-25 20:51:12,353 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 20:51:12,377 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9743,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750855873,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 20:51:12,378 - INFO - send_telegram returned: True
+2025-06-25 20:51:12,378 - INFO - 启动通知发送成功
+2025-06-25 20:51:12,387 - WARNING -  * Debugger is active!
+2025-06-25 20:51:12,388 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 20:51:12,411 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9744,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750855873,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 20:51:12,412 - INFO - send_telegram returned: True
+2025-06-25 20:51:12,412 - INFO - 启动通知发送成功
+2025-06-25 20:51:12,420 - WARNING -  * Debugger is active!
+2025-06-25 20:51:12,421 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 20:51:48,471 - INFO -  * Detected change in 'D:\\ethai\\strategy_notifier.py', reloading
+2025-06-25 20:51:48,509 - INFO -  * Detected change in 'D:\\ethai\\strategy_notifier.py', reloading
+2025-06-25 20:51:48,538 - INFO -  * Detected change in 'D:\\ethai\\strategy_notifier.py', reloading
+2025-06-25 20:51:48,547 - INFO -  * Restarting with stat
+2025-06-25 20:51:48,627 - INFO -  * Restarting with stat
+2025-06-25 20:51:48,646 - INFO -  * Restarting with stat
+2025-06-25 20:51:48,938 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 20:51:48,939 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 20:51:48,939 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 20:51:48,939 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 20:51:49,009 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 20:51:49,010 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 20:51:49,010 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 20:51:49,010 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 20:51:49,024 - INFO - Calling main with args: (), kwargs: {}
+2025-06-25 20:51:49,025 - INFO - Calling hourly_status_update with args: (), kwargs: {}
+2025-06-25 20:51:49,025 - INFO - Calling send_telegram with args: ('🤖 <b>ChanTradeBot 已启动</b>\n🚀 系统开始运行，每小时将自动发送状态更新。\n⏰ 下一次状态更新将在1小时后。',), kwargs: {}
+2025-06-25 20:51:49,025 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-25 20:51:50,478 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9745,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750855911,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 20:51:50,479 - INFO - send_telegram returned: True
+2025-06-25 20:51:50,479 - INFO - 启动通知发送成功
+2025-06-25 20:51:50,488 - WARNING -  * Debugger is active!
+2025-06-25 20:51:50,489 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 20:51:50,498 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9746,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750855911,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 20:51:50,499 - INFO - send_telegram returned: True
+2025-06-25 20:51:50,499 - INFO - 启动通知发送成功
+2025-06-25 20:51:50,508 - WARNING -  * Debugger is active!
+2025-06-25 20:51:50,510 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 20:51:50,539 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9747,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750855911,"text":"\ud83e\udd16 ChanTradeBot \u5df2\u542f\u52a8\n\ud83d\ude80 \u7cfb\u7edf\u5f00\u59cb\u8fd0\u884c\uff0c\u6bcf\u5c0f\u65f6\u5c06\u81ea\u52a8\u53d1\u9001\u72b6\u6001\u66f4\u65b0\u3002\n\u23f0 \u4e0b\u4e00\u6b21\u72b6\u6001\u66f4\u65b0\u5c06\u57281\u5c0f\u65f6\u540e\u3002","entities":[{"offset":3,"length":16,"type":"bold"}]}}
+2025-06-25 20:51:50,540 - INFO - send_telegram returned: True
+2025-06-25 20:51:50,541 - INFO - 启动通知发送成功
+2025-06-25 20:51:50,550 - WARNING -  * Debugger is active!
+2025-06-25 20:51:50,550 - INFO -  * Debugger PIN: 663-989-680
+2025-06-25 20:51:51,598 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+....................................
+💰 当前价格: $2421.65
+....................................
+⏰ <b>更新时间:</b> 2025-06-25 20:51 (北京时间)
+2025-06-25 20:51:51,598 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n....................................\n💰 当前价格: $2421.65\n....................................\n⏰ <b>更新时间:</b> 2025-06-25 20:51 (北京时间)',), kwargs: {}
+2025-06-25 20:51:51,598 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+....................................
+💰 当前价格: $2421.65
+....................................
+⏰ <b>更新时间:</b> 2025-06-25 20:51 (北京时间)
+2025-06-25 20:51:51,599 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n....................................\n💰 当前价格: $2421.65\n....................................\n⏰ <b>更新时间:</b> 2025-06-25 20:51 (北京时间)',), kwargs: {}
+2025-06-25 20:51:51,609 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+....................................
+💰 当前价格: $2421.65
+....................................
+⏰ <b>更新时间:</b> 2025-06-25 20:51 (北京时间)
+2025-06-25 20:51:51,610 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n....................................\n💰 当前价格: $2421.65\n....................................\n⏰ <b>更新时间:</b> 2025-06-25 20:51 (北京时间)',), kwargs: {}
+2025-06-25 20:51:52,998 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9748,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750855914,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n....................................\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2421.65\n....................................\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 20:51 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":106,"length":5,"type":"bold"}]}}
+2025-06-25 20:51:53,000 - INFO - send_telegram returned: True
+2025-06-25 20:51:53,001 - INFO - 状态更新通知发送成功
+2025-06-25 20:51:53,035 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9749,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750855914,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n....................................\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2421.65\n....................................\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 20:51 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":106,"length":5,"type":"bold"}]}}
+2025-06-25 20:51:53,036 - INFO - send_telegram returned: True
+2025-06-25 20:51:53,036 - INFO - 状态更新通知发送成功
+2025-06-25 20:51:53,079 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9750,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750855914,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n....................................\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2421.65\n....................................\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-25 20:51 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":106,"length":5,"type":"bold"}]}}
+2025-06-25 20:51:53,080 - INFO - send_telegram returned: True
+2025-06-25 20:51:53,080 - INFO - 状态更新通知发送成功
