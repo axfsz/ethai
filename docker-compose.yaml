@@ -3,6 +3,7 @@ version: '3.8'
 services:
   strategy-notifier:
     build: .
+    command: python -u bot.py
     container_name: strategy-notifier
     restart: unless-stopped
     env_file:
