@@ -6,6 +6,12 @@ class Config:
     # Telegram Bot settings
     TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '')
     TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID', '')
+
+    # InfluxDB settings
+    INFLUXDB_URL = os.getenv('INFLUXDB_URL')
+    INFLUXDB_TOKEN = os.getenv('INFLUXDB_TOKEN')
+    INFLUXDB_ORG = os.getenv('INFLUXDB_ORG')
+    INFLUXDB_BUCKET = os.getenv('INFLUXDB_BUCKET')
     
     # Exchange settings
     EXCHANGE = 'binance'

@@ -31,9 +31,17 @@ def main():
     }
     
     try:
-        db_manager = DatabaseManager()
+        # Initialize DatabaseManager by passing config values directly (Dependency Injection).
+        db_manager = DatabaseManager(
+            url=config.INFLUXDB_URL,
+            token=config.INFLUXDB_TOKEN,
+            org=config.INFLUXDB_ORG,
+            bucket=config.INFLUXDB_BUCKET
+        )
     except ValueError as e:
-        logger.critical(f"CRITICAL: Failed to initialize DatabaseManager. Bot cannot start. Error: {e}", exc_info=True)
+        # This will catch the error if any of the required InfluxDB config values are missing from the environment.
+        logger.critical(f"CRITICAL: Failed to initialize DatabaseManager. Bot cannot start. Error: {e}")
+        logger.critical("Please ensure INFLUXDB_URL, INFLUXDB_TOKEN, INFLUXDB_ORG, and INFLUXDB_BUCKET are set correctly in docker-compose.yaml.")
         return
 
     data_processor = SimpleDataProcessor(app_config, db_manager)
