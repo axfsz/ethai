@@ -129,24 +129,7 @@ class SignalDetector:
             elif close_prices[-1] < lower_band[-1]:
                 signals.append(Signal(name=f"{timeframe} 布林带收口后向下突破", type='bearish', description="价格在布林带收口后突破下轨", source='BBands'))
         return signals
-from typing import List, Dict, Any
 
-class Signal:
-    def __init__(self, name: str, strength: int, timeframe: str):
-        self.name = name
-        self.strength = strength
-        self.timeframe = timeframe
-
-class SignalDetector:
-    def detect_macd_signals(self, data: Dict[str, Any], timeframe: str) -> List[Signal]:
-        """检测MACD信号"""
-        signals = []
-        
-        # 检查MACD金叉
-        if data['macd'][-1] > data['macdsignal'][-1] and data['macd'][-2] <= data['macdsignal'][-2]:
-            signals.append(Signal('MACD Bullish', 2, timeframe))
-        elif data['macd'][-1] < data['macdsignal'][-1] and data['macd'][-2] >= data['macdsignal'][-2]:
-            signals.append(Signal('MACD Bearish', 2, timeframe))
             
         return signals
         
