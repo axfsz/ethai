@@ -74,7 +74,8 @@ class DatabaseManager:
               |> keep(columns: ["_time", "open", "high", "low", "close", "volume"])
               |> sort(columns: ["_time"])
             '''
-            result_df = self.query_api.query_dataframe(query, org=self.influx_org)
+            tables = self.query_api.query(query, org=self.influx_org)
+            result_df = tables.to_pandas()
             if result_df.empty:
                 logger.warning(f"Query for '{measurement}' on symbol {symbol} returned no data.")
                 return pd.DataFrame(columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
