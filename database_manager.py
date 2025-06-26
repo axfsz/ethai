@@ -7,16 +7,16 @@ from logging_config import logger
 class DatabaseManager:
     """Manages all interactions with the InfluxDB time-series database."""
 
-    def __init__(self):
-        """Initializes the database connection using environment variables."""
-        self.influx_url = os.getenv('INFLUXDB_URL', 'http://influxdb:8086')
-        self.influx_token = os.getenv('INFLUXDB_TOKEN')
-        self.influx_org = os.getenv('INFLUXDB_ORG')
-        self.bucket = os.getenv('INFLUXDB_BUCKET')
+    def __init__(self, url: str, token: str, org: str, bucket: str):
+        """Initializes the database connection using provided configuration."""
+        self.influx_url = url
+        self.influx_token = token
+        self.influx_org = org
+        self.bucket = bucket
 
-        if not all([self.influx_token, self.influx_org, self.bucket]):
-            logger.error("InfluxDB environment variables (TOKEN, ORG, BUCKET) are not fully set.")
-            raise ValueError("InfluxDB configuration is incomplete. Please check your .env file.")
+        if not all([self.influx_url, self.influx_token, self.influx_org, self.bucket]):
+            logger.error("InfluxDB configuration is incomplete. All parameters (URL, TOKEN, ORG, BUCKET) are required.")
+            raise ValueError("InfluxDB configuration is incomplete.")
 
         self.client = InfluxDBClient(url=self.influx_url, token=self.influx_token, org=self.influx_org)
         self.write_api = self.client.write_api(write_options=SYNCHRONOUS)
