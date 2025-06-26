@@ -79,7 +79,7 @@ def main():
                 # NOTE: Indicator calculation is not yet implemented. We are passing an empty dict for now.
                 # The Chan analysis might still work if it calculates its own MACD internally.
                 indicators = {}
-                signals = signal_detector.detect_all_signals(timeframe, indicators, ohlcv_list)
+                signals = signal_detector.detect_all_signals(timeframe, indicators)
                 all_signals[timeframe] = signals
             
             # Step 3: Generate and send notifications if any signals were found.
