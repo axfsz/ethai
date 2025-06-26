@@ -147,20 +147,69 @@ def detect_signals():
 def generate_strategy_message(signals):
     """生成策略消息"""
     now = datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d %H:%M (北京时间)")
-    bullish_signals = [s.name for s in signals if 'Bullish' in s.name or 'Breakout' in s.name]
-    bearish_signals = [s.name for s in signals if 'Bearish' in s.name]
+    all_signals = signals
 
-    if len(bullish_signals) >= 2:
-        position = f"做多 (发现 {len(bullish_signals)} 个看涨信号)"
-    elif len(bearish_signals) >= 2:
-        position = f"做空 (发现 {len(bearish_signals)} 个看跌信号)"
-    else:
-        position = "观望 (信号不足或冲突)"
+    strategy = ""
+    strategy_reason = ""
+
+    chan_bullish = [s for s in all_signals if s.source == 'Chan' and s.type == 'bullish']
+    chan_bearish = [s for s in all_signals if s.source == 'Chan' and s.type == 'bearish']
+    other_bullish = [s for s in all_signals if s.source != 'Chan' and s.type == 'bullish']
+    other_bearish = [s for s in all_signals if s.source != 'Chan' and s.type == 'bearish']
+
+    # 优先级1：缠论信号，一票决定
+    if chan_bullish:
+        strategy = "**做多策略单 (缠论信号)**\n.........\n"
+        strategy_reason = f"**策略依据**：触发了高优先级的 **{len(chan_bullish)}** 个缠论买点信号。\n"
+    elif chan_bearish:
+        strategy = "**做空策略单 (缠论信号)**\n.........\n"
+        strategy_reason = f"**策略依据**：触发了高优先级的 **{len(chan_bearish)}** 个缠论卖点信号。\n"
     
+    # 优先级2：多指标共振
+    elif len(other_bullish) >= 2 and not other_bearish:
+        strategy = "**做多策略单 (共振信号)**\n.........\n"
+        strategy_reason = f"**策略依据**：触发 **{len(other_bullish)}** 个看涨信号，形成共振，且无看跌信号干扰。\n"
+    elif len(other_bearish) >= 2 and not other_bullish:
+        strategy = "**做空策略单 (共振信号)**\n.........\n"
+        strategy_reason = f"**策略依据**：触发 **{len(other_bearish)}** 个看跌信号，形成共振，且无看涨信号干扰。\n"
+
+    # 优先级3：单一方向的明确信号 (处理“一晚上没信号”的问题)
+    elif len(other_bullish) > 0 and not other_bearish:
+        strategy = "**潜在做多机会 (单一信号)**\n.........\n"
+        strategy_reason = f"**策略依据**：仅触发 **{len(other_bullish)}** 个看涨信号，虽未共振但方向明确。\n"
+    elif len(other_bearish) > 0 and not other_bullish:
+        strategy = "**潜在做空机会 (单一信号)**\n.........\n"
+        strategy_reason = f"**策略依据**：仅触发 **{len(other_bearish)}** 个看跌信号，虽未共振但方向明确。\n"
+
+    # 优先级4：多空冲突或无信号
+    else:
+        if other_bullish and other_bearish:
+            strategy = "**空仓观望 (信号冲突)**\n.........\n"
+            strategy_reason = "**策略依据**：市场多空信号同时出现，方向不明。\n"
+        else:
+            strategy = "**空仓观望 (无明确信号)**\n.........\n"
+            strategy_reason = "**策略依据**：未发现任何有效的交易信号。\n"
+
+    # 格式化信号详情
+    signal_details = ""
+    if all_signals:
+        signal_details += "**触发信号详情**：\n"
+        # 优先展示缠论信号
+        for s in chan_bullish + chan_bearish:
+            signal_details += f"- [**缠论**] {s.name}: {s.description}\n"
+        for s in other_bullish:
+            signal_details += f"- [看涨] {s.name}: {s.description}\n"
+        for s in other_bearish:
+            signal_details += f"- [看跌] {s.name}: {s.description}\n"
+    else:
+        signal_details = "无"
+
+    # 发送通知
     message = f"<b>📊 ETH 策略预测</b>\n"
     message += "....................................\n"
-    message += f"⚡ 检测信号: {', '.join(s.name for s in signals) if signals else '无'}\n"
-    message += f"💡 仓位建议: {position}\n"
+    message += strategy
+    message += strategy_reason
+    message += signal_details
     message += "....................................\n"
     message += f"<i>免责声明：以上为AI策略预测，不构成投资建议。</i>\n"
     message += f"⏰ <b>生成时间:</b> {now}"

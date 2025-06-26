@@ -131,11 +131,12 @@ class SimpleDataProcessor:
         
     def get_all_timeframes_data(self, exchange) -> Dict[str, Dict[str, List[float]]]:
         """获取所有时间周期的数据"""
+        # 优化后的时间周期，更专注于中短期机会
         timeframes = {
-            '1w': 60,
-            '1d': 180,
-            '4h': 200,
-            '1h': 120
+            '4h': 200,  # 约33天数据
+            '1h': 120,  # 5天数据
+            '15m': 120, # 30小时数据
+            '5m': 120   # 10小时数据
         }
         
         data = {}
