@@ -18,7 +18,7 @@ services:
     ports:
       - "5001:5001"
     volumes:
-      - ./logs:/app/logs
+      - .:/app
     networks:
       - tradingnet
     depends_on:
