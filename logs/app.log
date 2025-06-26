@@ -4932,3 +4932,17 @@ ccxt.base.errors.RequestTimeout: binance GET https://api.binance.com/api/v3/tick
 2025-06-26 13:15:51,257 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9944,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750914955,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n--------------------------\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2478.71\n====================\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-26 13:15 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":80,"length":5,"type":"bold"}]}}
 2025-06-26 13:15:51,259 - INFO - send_telegram returned: True
 2025-06-26 13:15:51,259 - INFO - 状态更新通知发送成功
+2025-06-26 13:22:25,765 - INFO - Calling generate_status_message with args: (), kwargs: {}
+2025-06-26 13:22:26,657 - INFO - generate_status_message returned: <b>📊 ETH 状态更新</b>
+· · · · · · · · · · · · · · · · ·
+💰 当前价格: $2474.15
+· · · · · · · · · · · · · · · · ·
+⏰ <b>更新时间:</b> 2025-06-26 13:22 (北京时间)
+2025-06-26 13:22:26,657 - INFO - Calling send_telegram with args: ('<b>📊 ETH 状态更新</b>\n· · · · · · · · · · · · · · · · ·\n💰 当前价格: $2474.15\n· · · · · · · · · · · · · · · · ·\n⏰ <b>更新时间:</b> 2025-06-26 13:22 (北京时间)',), kwargs: {}
+2025-06-26 13:22:27,980 - INFO - Telegram 发送成功 | 聊天ID: 6835958824 | 响应: {"ok":true,"result":{"message_id":9949,"from":{"id":7378390777,"is_bot":true,"first_name":"axfsrc_bot","username":"axfsrc_bot"},"chat":{"id":6835958824,"first_name":"T","last_name":"ingx","username":"tingxf","type":"private"},"date":1750915351,"text":"\ud83d\udcca ETH \u72b6\u6001\u66f4\u65b0\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\ud83d\udcb0 \u5f53\u524d\u4ef7\u683c: $2474.15\n\u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7 \u00b7\n\u23f0 \u66f4\u65b0\u65f6\u95f4: 2025-06-26 13:22 (\u5317\u4eac\u65f6\u95f4)","entities":[{"offset":0,"length":11,"type":"bold"},{"offset":100,"length":5,"type":"bold"}]}}
+2025-06-26 13:22:27,981 - INFO - send_telegram returned: True
+2025-06-26 13:22:27,982 - INFO - 状态更新通知发送成功
+2025-06-26 13:40:53,519 - INFO -  * Detected change in 'D:\\ethai\\simple_data_processor.py', reloading
+2025-06-26 13:40:53,519 - INFO -  * Detected change in 'D:\\ethai\\simple_data_processor.py', reloading
+2025-06-26 13:40:53,853 - INFO -  * Restarting with stat
+2025-06-26 13:40:53,866 - INFO -  * Restarting with stat

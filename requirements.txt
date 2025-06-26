@@ -1,6 +1,6 @@
 ccxt==4.0.91
-pandas==2.2.2
-ta==0.11.0
-flask==3.0.2
-requests==2.31.0
-ccxt
+python-telegram-bot==20.3
+pandas
+numpy
+pytz
+influxdb-client[ciso]>=1.39.0
