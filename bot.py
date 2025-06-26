@@ -74,7 +74,12 @@ def main():
                     continue
                 
                 logger.info(f"Detecting signals for {timeframe} using {len(historical_df)} data points from DB...")
-                signals = signal_detector.detect_all_signals(historical_df)
+                # Convert DataFrame to the list of lists format expected by the detector
+                ohlcv_list = historical_df[['timestamp', 'open', 'high', 'low', 'close', 'volume']].values.tolist()
+                # NOTE: Indicator calculation is not yet implemented. We are passing an empty dict for now.
+                # The Chan analysis might still work if it calculates its own MACD internally.
+                indicators = {}
+                signals = signal_detector.detect_all_signals(timeframe, indicators, ohlcv_list)
                 all_signals[timeframe] = signals
             
             # Step 3: Generate and send notifications if any signals were found.
