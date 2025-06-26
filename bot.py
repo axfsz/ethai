@@ -72,7 +72,7 @@ def main():
             # Step 3: Generate and send notifications if any signals were found.
             logger.info("[WORKFLOW] Step 3: Generating strategy and notifying.")
             if any(s for s in all_signals.values() if s):
-                strategy_notifier.generate_and_notify_strategy(all_signals)
+                strategy_notifier.notify(all_signals, symbol=app_config['symbol'])
             else:
                 logger.info("No trading signals detected across all timeframes.")
             logger.info("------------------- Scheduled Job Finished -------------------")
