@@ -1,6 +1,6 @@
 import time
 import schedule
-from config import load_config
+from config import config
 from simple_data_processor import SimpleDataProcessor
 from signal_detector import SignalDetector
 from strategy_notifier import StrategyNotifier
@@ -13,7 +13,22 @@ def main():
     logger.info("===         Starting ChanTradeBot with InfluxDB       ===")
     logger.info("=========================================================")
     
-    config = load_config()
+    # Adapt the config object to the dictionary format expected by other modules.
+    app_config = {
+        'exchange': {
+            'name': config.EXCHANGE,
+            'apiKey': config.CCXT_API_KEY,
+            'secret': config.CCXT_SECRET_KEY,
+            'proxy': config.CCXT_PROXY
+        },
+        'symbol': config.SYMBOL,
+        'timeframes': list(config.TIMEFRAMES.keys()),
+        'telegram': {
+            'token': config.TELEGRAM_BOT_TOKEN,
+            'chat_id': config.TELEGRAM_CHAT_ID
+        },
+        'schedule_minutes': config.SCHEDULE_MINUTES
+    }
     
     try:
         db_manager = DatabaseManager()
@@ -21,9 +36,9 @@ def main():
         logger.critical(f"CRITICAL: Failed to initialize DatabaseManager. Bot cannot start. Error: {e}", exc_info=True)
         return
 
-    data_processor = SimpleDataProcessor(config, db_manager)
+    data_processor = SimpleDataProcessor(app_config, db_manager)
     signal_detector = SignalDetector()
-    strategy_notifier = StrategyNotifier(config.get('telegram', {}))
+    strategy_notifier = StrategyNotifier(app_config.get('telegram', {}))
 
     def job():
         """The main job to be scheduled. Fetches, stores, and analyzes data."""
@@ -37,12 +52,12 @@ def main():
             all_signals = {}
             # Step 2: For each timeframe, query a full history from the DB and analyze.
             logger.info("[WORKFLOW] Step 2: Querying historical data and detecting signals.")
-            for timeframe in config['timeframes']:
+            for timeframe in app_config['timeframes']:
                 # Query a long history for more accurate analysis (e.g., 30 days).
                 # Chan theory and other indicators benefit greatly from more context.
                 historical_df = db_manager.query_ohlcv_data(
                     measurement=timeframe, 
-                    symbol=config['symbol'], 
+                    symbol=app_config['symbol'], 
                     time_range_start="-30d"
                 )
                 
@@ -66,9 +81,8 @@ def main():
             logger.error(f"An critical error occurred in the main job: {e}", exc_info=True)
 
     # --- Scheduler Setup ---
-    schedule_minutes = config.get('schedule_minutes', 5)
-    schedule.every(schedule_minutes).minutes.do(job)
-    logger.info(f"Job scheduled to run every {schedule_minutes} minutes.")
+    schedule.every(app_config['schedule_minutes']).minutes.do(job)
+    logger.info(f"Job scheduled to run every {app_config['schedule_minutes']} minutes.")
 
     # Run the job immediately at startup, then enter the main loop.
     logger.info("Running initial job at startup...")

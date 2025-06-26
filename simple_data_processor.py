@@ -16,18 +16,30 @@ class SimpleDataProcessor:
         logger.info("SimpleDataProcessor initialized.")
 
     def _init_exchange(self, exchange_config: Dict) -> ccxt.Exchange:
-        """Initializes the ccxt exchange instance."""
+        """Initializes the ccxt exchange instance, using API keys only if they are provided."""
         exchange_class = getattr(ccxt, exchange_config['name'])
-        exchange = exchange_class({
-            'apiKey': exchange_config['apiKey'],
-            'secret': exchange_config['secret'],
+
+        ccxt_params = {
             'options': {
                 'defaultType': 'swap',
             },
-        })
+        }
+
+        # Only add API keys to the configuration if they are present and not empty
+        if exchange_config.get('apiKey') and exchange_config.get('secret'):
+            ccxt_params['apiKey'] = exchange_config['apiKey']
+            ccxt_params['secret'] = exchange_config['secret']
+            logger.info("Exchange API keys provided and will be used for authentication.")
+        else:
+            logger.info("No Exchange API keys provided. Initializing with public access only.")
+
+        exchange = exchange_class(ccxt_params)
+
         if exchange_config.get('proxy'):
             exchange.proxies = {'http': exchange_config['proxy'], 'https': exchange_config['proxy']}
-        logger.info(f"CCXT exchange '{exchange_config['name']}' initialized.")
+            logger.info(f"Using proxy: {exchange_config['proxy']}")
+            
+        logger.info(f"CCXT exchange '{exchange_config['name']}' initialized successfully.")
         return exchange
 
     def fetch_and_store_ohlcv_data(self):
