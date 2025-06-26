@@ -1,4 +1,9 @@
 ccxt==4.0.91
+requests
+pandas
+influxdb-client[ciso]
+schedule
+python-dotenv
 python-telegram-bot==20.3
 pandas
 numpy
