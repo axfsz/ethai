@@ -6,8 +6,15 @@ services:
     command: python -u bot.py
     container_name: strategy-notifier
     restart: unless-stopped
-    env_file:
-      - .env
+    environment:
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_TOKEN=5ZHMz322kYNpsB1NCoBrd
+      - INFLUXDB_ORG=ChanTradeOrg
+      - INFLUXDB_BUCKET=ChanTradeBucket
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+      - SYMBOL=${SYMBOL}
+      - SCHEDULE_MINUTES=${SCHEDULE_MINUTES}
     ports:
       - "5001:5001"
     volumes:
